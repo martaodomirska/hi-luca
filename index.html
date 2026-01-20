@@ -148,7 +148,6 @@
       to{opacity:0; transform:translate(var(--x), var(--y)) scale(0.3)}
     }
 
-    /* cute letter view */
     #letter{
       display:none;
       width:min(820px, 94vw);
@@ -163,30 +162,10 @@
       z-index:2;
     }
 
-    #letterHeader{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:10px;
-    }
-
     #letter h2{
-      margin:0;
+      margin:0 0 12px;
       color:#b21f55;
       font-size:22px;
-      letter-spacing:.2px;
-    }
-
-    #letterBadge{
-      font-size:12px;
-      font-weight:700;
-      color:#b21f55;
-      background: rgba(255,77,141,0.10);
-      border: 1px solid rgba(255,77,141,0.22);
-      padding:6px 10px;
-      border-radius:999px;
-      white-space:nowrap;
     }
 
     #paper{
@@ -201,16 +180,7 @@
       max-height: 58vh;
       overflow:auto;
       padding:18px 18px 14px;
-      scrollbar-width: thin;
     }
-
-    #letterScroll::-webkit-scrollbar{ width:10px; }
-    #letterScroll::-webkit-scrollbar-thumb{
-      background: rgba(178,31,85,0.28);
-      border-radius:999px;
-      border: 3px solid rgba(255,255,255,0.55);
-    }
-    #letterScroll::-webkit-scrollbar-track{ background: transparent; }
 
     #letterText{
       white-space:pre-wrap;
@@ -228,7 +198,7 @@
     }
 
     #sigLine{
-      width: 140px;
+      width:140px;
       height:1px;
       background: rgba(178,31,85,0.35);
     }
@@ -236,7 +206,6 @@
     #sigName{
       font-weight:700;
       color:#b21f55;
-      letter-spacing:.2px;
     }
 
     #sigSmall{
@@ -244,13 +213,11 @@
       color: rgba(59,31,43,0.70);
     }
 
-    /* scroll fade overlays */
     .fadeTop, .fadeBottom{
       position:absolute;
       left:0; right:0;
       height:34px;
       pointer-events:none;
-      transition: opacity .18s ease;
     }
 
     .fadeTop{
@@ -263,13 +230,6 @@
       bottom:0;
       background: linear-gradient(0deg, rgba(255,255,255,0.95), rgba(255,255,255,0));
       opacity:1;
-    }
-
-    #miniHint{
-      margin-top:10px;
-      font-size:12px;
-      color: rgba(59,31,43,0.70);
-      text-align:center;
     }
   </style>
 </head>
@@ -300,10 +260,7 @@
   </div>
 
   <div id="letter">
-    <div id="letterHeader">
-      <h2>for luca</h2>
-      <div id="letterBadge">private message</div>
-    </div>
+    <h2>for luca</h2>
 
     <div id="paper">
       <div class="fadeTop" id="fadeTop"></div>
@@ -311,16 +268,6 @@
 
       <div id="letterScroll">
         <div id="letterText">Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
 
 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
 
@@ -333,8 +280,6 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
         </div>
       </div>
     </div>
-
-    <div id="miniHint">scroll</div>
   </div>
 
   <script>
@@ -347,7 +292,6 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
     const photoHint = document.getElementById("photoHint");
     const card = document.getElementById("card");
     const letter = document.getElementById("letter");
-
     const letterScroll = document.getElementById("letterScroll");
     const fadeTop = document.getElementById("fadeTop");
     const fadeBottom = document.getElementById("fadeBottom");
@@ -400,7 +344,7 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
     yesPic.addEventListener("click", () => {
       card.style.display = "none";
       letter.style.display = "block";
-      requestAnimationFrame(updateFades);
+      updateFades();
     });
 
     function updateFades(){
