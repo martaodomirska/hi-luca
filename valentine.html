@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>will you be my valentine?</title>
+
+  <style>
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, #fff0f6, #ffe3ef);
+      overflow:hidden;
+      cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='2' y='22' font-size='20'>%F0%9F%92%97</text></svg>") 4 20, auto;
+    }
+
+    .hearts{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    .heart{
+      position:absolute;
+      bottom:-40px;
+      font-size:22px;
+      opacity:0.6;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp{
+      from{ transform: translateY(0); }
+      to{ transform: translateY(-110vh); }
+    }
+
+    .card{
+      width:min(620px, 92vw);
+      padding:28px;
+      border-radius:22px;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border:1px solid rgba(255,77,141,0.25);
+      box-shadow:0 20px 60px rgba(255,77,141,0.25);
+      text-align:center;
+      position:relative;
+      z-index:1;
+    }
+
+    h1{
+      margin:0 0 8px;
+      font-size:32px;
+      color:#b21f55;
+    }
+
+    #waitMsg{
+      display:none;
+      margin-bottom:10px;
+      font-weight:600;
+      color:#b21f55;
+    }
+
+    .stage{
+      position:relative;
+      height:170px;
+      border-radius:18px;
+      background: rgba(255,143,184,0.15);
+      margin-bottom:16px;
+      overflow:hidden;
+    }
+
+    button{
+      border:none;
+      border-radius:999px;
+      padding:12px 18px;
+      font-size:16px;
+      font-weight:600;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    #yesBtn{
+      background: linear-gradient(135deg, #ff4d8d, #ff8fb8);
+      color:white;
+      margin-top:56px;
+      animation: wiggle 3.5s ease-in-out infinite;
+    }
+
+    @keyframes wiggle{
+      0%,84%,100%{transform:rotate(0deg)}
+      88%{transform:rotate(-2deg)}
+      92%{transform:rotate(2deg)}
+      96%{transform:rotate(-1deg)}
+    }
+
+    #noBtn{
+      position:absolute;
+      left:60%;
+      top:60%;
+      background:white;
+      color:#b21f55;
+      border:1px solid rgba(255,77,141,0.35);
+    }
+
+    img{
+      display:none;
+      margin-top:14px;
+      max-width:100%;
+      border-radius:16px;
+      box-shadow:0 16px 40px rgba(255,77,141,0.25);
+    }
+
+    #noMsg{
+      display:none;
+      margin-top:12px;
+      font-weight:700;
+      color:#b21f55;
+    }
+
+    .sparkle{
+      position:fixed;
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background: rgba(255,77,141,0.7);
+      box-shadow:0 0 16px rgba(255,77,141,0.6);
+      pointer-events:none;
+      animation: sparkle 900ms ease-out forwards;
+      z-index:9999;
+    }
+
+    @keyframes sparkle{
+      from{opacity:1; transform:scale(1)}
+      to{opacity:0; transform:scale(0.1)}
+    }
+
+    .burst{
+      position:fixed;
+      font-size:20px;
+      pointer-events:none;
+      animation: burst 900ms ease-out forwards;
+      z-index:9999;
+    }
+
+    @keyframes burst{
+      from{opacity:1; transform:translate(0,0) scale(1)}
+      to{opacity:0; transform:translate(var(--x), var(--y)) scale(0.3)}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="hearts">
+    <div class="heart" style="left:10%; animation-duration:12s;">💗</div>
+    <div class="heart" style="left:25%; animation-duration:10s;">💖</div>
+    <div class="heart" style="left:40%; animation-duration:14s;">💘</div>
+    <div class="heart" style="left:55%; animation-duration:11s;">💞</div>
+    <div class="heart" style="left:70%; animation-duration:13s;">💓</div>
+    <div class="heart" style="left:85%; animation-duration:12s;">💗</div>
+  </div>
+
+  <div class="card">
+    <h1>will you be my valentine? &lt;3</h1>
+    <div id="waitMsg">thinking?</div>
+
+    <div class="stage" id="stage">
+      <button id="yesBtn">yes</button>
+      <button id="noBtn">no</button>
+    </div>
+
+    <img id="yesPic" src="yes.jpg" alt="yes">
+    <img id="noPic" src="no.jpg" alt="no">
+
+    <div id="noMsg">nice try, luca</div>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const stage = document.getElementById("stage");
+    const yesPic = document.getElementById("yesPic");
+    const noPic = document.getElementById("noPic");
+    const noMsg = document.getElementById("noMsg");
+    const waitMsg = document.getElementById("waitMsg");
+
+    let waitTimer = setTimeout(() => {
+      waitMsg.style.display = "block";
+    }, 5000);
+
+    function resetWait(){
+      clearTimeout(waitTimer);
+      waitMsg.style.display = "none";
+    }
+
+    function heartExplosion(x, y){
+      const hearts = ["💗","💖","💘","💞","💓"];
+      for(let i=0;i<18;i++){
+        const h = document.createElement("div");
+        h.className = "burst";
+        h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+        h.style.left = x + "px";
+        h.style.top = y + "px";
+        h.style.setProperty("--x", (Math.random()*200-100)+"px");
+        h.style.setProperty("--y", (Math.random()*-200-50)+"px");
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 900);
+      }
+    }
+
+    yesBtn.onclick = (e) => {
+      resetWait();
+      yesPic.style.display = "block";
+      noPic.style.display = "none";
+      noMsg.style.display = "none";
+      heartExplosion(e.clientX, e.clientY);
+    };
+
+    function moveNo(){
+      resetWait();
+      const x = Math.random() * (stage.clientWidth - noBtn.offsetWidth);
+      const y = Math.random() * (stage.clientHeight - noBtn.offsetHeight);
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
+    noBtn.onmouseenter = moveNo;
+    noBtn.onmousedown = moveNo;
+
+    noBtn.onclick = () => {
+      resetWait();
+      noPic.style.display = "block";
+      yesPic.style.display = "none";
+      noMsg.style.display = "block";
+    };
+
+    let last = 0;
+    document.onmousemove = e => {
+      const now = performance.now();
+      if(now - last < 20) return;
+      last = now;
+
+      const s = document.createElement("div");
+      s.className = "sparkle";
+      s.style.left = e.clientX + "px";
+      s.style.top = e.clientY + "px";
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 1000);
+    };
+  </script>
+</body>
+</html>
