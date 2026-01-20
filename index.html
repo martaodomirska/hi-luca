@@ -99,8 +99,6 @@
 
     #noBtn{
       position:absolute;
-      left:60%;
-      top:60%;
       background:white;
       color:#b21f55;
       border:1px solid rgba(255,77,141,0.35);
@@ -112,6 +110,14 @@
       max-width:100%;
       border-radius:16px;
       box-shadow:0 16px 40px rgba(255,77,141,0.25);
+      cursor:pointer;
+    }
+
+    #photoHint{
+      display:none;
+      margin-top:10px;
+      font-weight:600;
+      color:#b21f55;
     }
 
     .sparkle{
@@ -141,6 +147,32 @@
       from{opacity:1; transform:translate(0,0) scale(1)}
       to{opacity:0; transform:translate(var(--x), var(--y)) scale(0.3)}
     }
+
+    #letter{
+      display:none;
+      width:min(760px, 92vw);
+      padding:28px;
+      border-radius:22px;
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border:1px solid rgba(255,77,141,0.25);
+      box-shadow:0 20px 60px rgba(255,77,141,0.25);
+      z-index:2;
+    }
+
+    #letter h2{
+      margin:0 0 12px;
+      color:#b21f55;
+      font-size:22px;
+    }
+
+    #letter .text{
+      white-space:pre-wrap;
+      line-height:1.6;
+      font-size:16px;
+      color:#3b1f2b;
+    }
   </style>
 </head>
 
@@ -154,26 +186,52 @@
     <div class="heart" style="left:85%; animation-duration:12s;">💗</div>
   </div>
 
-  <div class="card">
+  <div class="card" id="card">
     <h1>will you be my valentine? &lt;3</h1>
     <div id="waitMsg">thinking?</div>
 
     <div class="stage" id="stage">
-      <button id="yesBtn" type="button">yes</button>
-      <button id="noBtn" type="button">no</button>
+      <button id="yesBtn">yes</button>
+      <button id="noBtn">no</button>
     </div>
 
     <img id="yesPic" src="yes.jpg" alt="yes">
     <img id="noPic" src="no.jpg" alt="no">
+
+    <div id="photoHint">click the photo</div>
+  </div>
+
+  <div id="letter">
+    <h2>for luca</h2>
+    <div class="text">
+Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+
+Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+
+Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+
+Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+
+Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+
+Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+
+Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+
+Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+    </div>
   </div>
 
   <script>
     const yesBtn = document.getElementById("yesBtn");
-    const noBtn  = document.getElementById("noBtn");
-    const stage  = document.getElementById("stage");
+    const noBtn = document.getElementById("noBtn");
+    const stage = document.getElementById("stage");
     const yesPic = document.getElementById("yesPic");
-    const noPic  = document.getElementById("noPic");
+    const noPic = document.getElementById("noPic");
     const waitMsg = document.getElementById("waitMsg");
+    const photoHint = document.getElementById("photoHint");
+    const card = document.getElementById("card");
+    const letter = document.getElementById("letter");
 
     let waitTimer = setTimeout(() => {
       waitMsg.style.display = "block";
@@ -199,61 +257,33 @@
       }
     }
 
-    function moveNo(e){
-      if(e) e.preventDefault();
+    function moveNo(){
       resetWait();
-      const maxX = Math.max(0, stage.clientWidth  - noBtn.offsetWidth);
-      const maxY = Math.max(0, stage.clientHeight - noBtn.offsetHeight);
-      noBtn.style.left = (Math.random() * maxX) + "px";
-      noBtn.style.top  = (Math.random() * maxY) + "px";
+      const maxX = stage.clientWidth - noBtn.offsetWidth;
+      const maxY = stage.clientHeight - noBtn.offsetHeight;
+      noBtn.style.left = Math.random() * maxX + "px";
+      noBtn.style.top  = Math.random() * maxY + "px";
     }
 
-    noBtn.addEventListener("mouseenter", moveNo, { passive:false });
-    noBtn.addEventListener("mousedown", moveNo, { passive:false });
-    noBtn.addEventListener("click", moveNo, { passive:false });
-    noBtn.addEventListener("touchstart", moveNo, { passive:false });
-    noBtn.addEventListener("pointerdown", moveNo, { passive:false });
-    noBtn.addEventListener("pointerenter", moveNo, { passive:false });
+    noBtn.addEventListener("mouseenter", moveNo);
+    noBtn.addEventListener("mousedown", moveNo);
+    noBtn.addEventListener("touchstart", moveNo);
+    noBtn.addEventListener("pointerdown", moveNo);
 
     yesBtn.addEventListener("click", (e) => {
       resetWait();
       yesPic.style.display = "block";
       noPic.style.display = "none";
+      photoHint.style.display = "block";
       heartExplosion(e.clientX, e.clientY);
     });
 
-    moveNo();
-
-    let last = 0;
-    document.addEventListener("mousemove", (e) => {
-      const now = performance.now();
-      if(now - last < 20) return;
-      last = now;
-
-      const s = document.createElement("div");
-      s.className = "sparkle";
-      s.style.left = e.clientX + "px";
-      s.style.top  = e.clientY + "px";
-      document.body.appendChild(s);
-      setTimeout(() => s.remove(), 1000);
+    yesPic.addEventListener("click", () => {
+      card.style.display = "none";
+      letter.style.display = "block";
     });
 
-    document.addEventListener("touchmove", (e) => {
-      resetWait();
-      const t = e.touches && e.touches[0];
-      if(!t) return;
-
-      const now = performance.now();
-      if(now - last < 25) return;
-      last = now;
-
-      const s = document.createElement("div");
-      s.className = "sparkle";
-      s.style.left = t.clientX + "px";
-      s.style.top  = t.clientY + "px";
-      document.body.appendChild(s);
-      setTimeout(() => s.remove(), 1000);
-    }, { passive:true });
+    moveNo();
   </script>
 </body>
 </html>
