@@ -104,7 +104,7 @@
       border:1px solid rgba(255,77,141,0.35);
     }
 
-    /* photo + hint */
+    /* photo + delayed hint */
     #photoWrap{
       position:relative;
       display:none;
@@ -122,14 +122,14 @@
     #clickMe{
       position:absolute;
       left:50%;
-      top:-10px;
+      bottom:12px;
       transform:translateX(-50%);
-      background: rgba(255,255,255,0.88);
+      background: rgba(255,255,255,0.92);
       border:1px solid rgba(255,77,141,0.28);
       color:#b21f55;
       padding:8px 12px;
       border-radius:999px;
-      font-weight:700;
+      font-weight:800;
       font-size:13px;
       box-shadow:0 10px 24px rgba(255,77,141,0.18);
       display:none;
@@ -140,22 +140,6 @@
     @keyframes bob{
       0%,100%{ transform:translateX(-50%) translateY(0); }
       50%{ transform:translateX(-50%) translateY(-6px); }
-    }
-
-    .sparkle{
-      position:fixed;
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background: rgba(255,77,141,0.7);
-      box-shadow:0 0 16px rgba(255,77,141,0.6);
-      pointer-events:none;
-      animation: sparkle 900ms ease-out forwards;
-      z-index:9999;
-    }
-    @keyframes sparkle{
-      from{opacity:1; transform:scale(1)}
-      to{opacity:0; transform:scale(0.1)}
     }
 
     .burst{
@@ -208,7 +192,6 @@
       box-shadow: 0 18px 45px rgba(255,77,141,0.18);
     }
 
-    /* little “tape” corners */
     #paper::before, #paper::after{
       content:"";
       position:absolute;
@@ -245,29 +228,23 @@
     }
 
     #signature{
-      margin-top:16px;
+      margin-top:18px;
       display:flex;
       flex-direction:column;
-      gap:4px;
+      gap:6px;
       align-items:flex-end;
-    }
-
-    #sigLine{
-      width:160px;
-      height:1px;
-      background: rgba(178,31,85,0.35);
-    }
-
-    #sigName{
-      font-weight:800;
-      color:#b21f55;
       font-family: ui-serif, Georgia, "Times New Roman", serif;
-      letter-spacing:.2px;
+      color:#b21f55;
     }
 
-    #sigSmall{
-      font-size:12px;
-      color: rgba(59,31,43,0.70);
+    #signature .yours{
+      font-style:italic;
+      font-weight:600;
+    }
+
+    #signature .name{
+      font-weight:800;
+      letter-spacing:.2px;
     }
 
     .fadeTop, .fadeBottom{
@@ -276,20 +253,19 @@
       height:34px;
       pointer-events:none;
       z-index:4;
+      transition: opacity .18s ease;
     }
 
     .fadeTop{
       top:0;
       background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0));
       opacity:0;
-      transition: opacity .18s ease;
     }
 
     .fadeBottom{
       bottom:0;
       background: linear-gradient(0deg, rgba(255,255,255,0.98), rgba(255,255,255,0));
       opacity:1;
-      transition: opacity .18s ease;
     }
   </style>
 </head>
@@ -314,7 +290,7 @@
     </div>
 
     <div id="photoWrap">
-      <div id="clickMe">click me</div>
+      <div id="clickMe">tap the photo</div>
       <img id="yesPic" src="yes.jpg" alt="yes">
       <img id="noPic" src="no.jpg" alt="no">
     </div>
@@ -345,9 +321,8 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</div>
 
         <div id="signature">
-          <div id="sigLine"></div>
-          <div id="sigName">m</div>
-          <div id="sigSmall">x</div>
+          <div class="yours">yours,</div>
+          <div class="name">marta</div>
         </div>
       </div>
     </div>
@@ -408,16 +383,25 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
     noBtn.addEventListener("pointerdown", moveNo);
     noBtn.addEventListener("click", moveNo);
 
+    let clickTimer = null;
+
     yesBtn.addEventListener("click", (e) => {
       resetWait();
       photoWrap.style.display = "block";
       yesPic.style.display = "block";
       noPic.style.display = "none";
-      clickMe.style.display = "block";
+      clickMe.style.display = "none";
+
+      if(clickTimer) clearTimeout(clickTimer);
+      clickTimer = setTimeout(() => {
+        clickMe.style.display = "block";
+      }, 6000);
+
       heartExplosion(e.clientX, e.clientY);
     });
 
     yesPic.addEventListener("click", () => {
+      if(clickTimer) clearTimeout(clickTimer);
       card.style.display = "none";
       letter.style.display = "block";
       updateFades();
