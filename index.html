@@ -14,11 +14,10 @@
       --border: rgba(255,77,141,0.25);
       --shadow: rgba(255,77,141,0.25);
 
-      /* chess piece shades (clearly different) */
       --youShadeName: "blush pink";
       --cpuShadeName: "deep rose";
-      --youPiece:#ff77b7;   /* blush pink */
-      --cpuPiece:#d81b60;   /* deep rose */
+      --youPiece:#ff77b7;
+      --cpuPiece:#d81b60;
 
       --boardLight: rgba(255,255,255,0.78);
       --boardDark: rgba(255,143,184,0.22);
@@ -151,20 +150,23 @@
       50%{ transform:translateX(-50%) translateY(-6px); }
     }
 
+    /* SUBTLE sparkle trail */
     .sparkle{
       position:fixed;
-      width:10px; height:10px;
+      width:7px; height:7px;
       border-radius:999px;
-      background: rgba(255,77,141,0.75);
-      box-shadow: 0 0 14px rgba(255,77,141,0.55), 0 0 30px rgba(255,143,184,0.35);
+      background: rgba(255,77,141,0.22);
+      box-shadow:
+        0 0 10px rgba(255,77,141,0.18),
+        0 0 22px rgba(255,143,184,0.14);
       pointer-events:none;
-      animation: sparkle 1100ms ease-out forwards;
+      animation: sparkle 800ms ease-out forwards;
       z-index:9999;
       mix-blend-mode: multiply;
     }
     @keyframes sparkle{
-      from{opacity:1; transform:translate(-50%,-50%) scale(1)}
-      to{opacity:0; transform:translate(-50%,-50%) scale(0.12)}
+      from{opacity:0.9; transform:translate(-50%,-50%) scale(1)}
+      to{opacity:0; transform:translate(-50%,-50%) scale(0.15)}
     }
 
     .burst{
@@ -343,7 +345,6 @@
 
     .glassCard iframe{ position:relative; border-radius:14px; }
 
-    /* CHESS */
     .chessboard{
       position:relative;
       width:100%;
@@ -546,22 +547,8 @@
     const youShadeName = getComputedStyle(document.documentElement).getPropertyValue("--youShadeName").trim().replaceAll('"','');
     const cpuShadeName = getComputedStyle(document.documentElement).getPropertyValue("--cpuShadeName").trim().replaceAll('"','');
 
-    /* PUT YOUR FULL LETTERS HERE */
-    const englishLetter = `Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.`;
-
-    const polishLetter = `Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.`;
+    const englishLetter = `Lorem ipsum dolor sit amet consectetur adipiscing elit...`;
+    const polishLetter  = `Lorem ipsum dolor sit amet consectetur adipiscing elit...`;
 
     let waitTimer = setTimeout(() => { waitMsg.style.display = "block"; }, 5000);
     function resetWait(){
@@ -656,6 +643,7 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       initChessOnce();
     });
 
+    /* SUBTLE TRAIL SETTINGS */
     let last = 0;
     function spawnSparkle(x, y){
       const s = document.createElement("div");
@@ -663,23 +651,23 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       s.style.left = x + "px";
       s.style.top  = y + "px";
       document.body.appendChild(s);
-      setTimeout(() => s.remove(), 1200);
+      setTimeout(() => s.remove(), 900);
     }
     document.addEventListener("mousemove", (e) => {
       const now = performance.now();
-      if(now - last < 12) return;
+      if(now - last < 22) return;     /* fewer sparkles */
       last = now;
       spawnSparkle(e.clientX, e.clientY);
-      if(Math.random() < 0.35) spawnSparkle(e.clientX + (Math.random()*18-9), e.clientY + (Math.random()*18-9));
+      if(Math.random() < 0.18) spawnSparkle(e.clientX + (Math.random()*14-7), e.clientY + (Math.random()*14-7));
     });
     document.addEventListener("touchmove", (e) => {
       const t = e.touches && e.touches[0];
       if(!t) return;
       const now = performance.now();
-      if(now - last < 14) return;
+      if(now - last < 24) return;
       last = now;
       spawnSparkle(t.clientX, t.clientY);
-      if(Math.random() < 0.35) spawnSparkle(t.clientX + (Math.random()*18-9), t.clientY + (Math.random()*18-9));
+      if(Math.random() < 0.18) spawnSparkle(t.clientX + (Math.random()*14-7), t.clientY + (Math.random()*14-7));
     }, { passive:true });
 
     moveNo();
@@ -777,7 +765,6 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       return bestMove;
     }
 
-    /* UPDATED: pieces now clearly different shades */
     function pieceSvg(type, color){
       const fill = color === "w"
         ? getComputedStyle(document.documentElement).getPropertyValue("--youPiece").trim()
