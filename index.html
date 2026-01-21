@@ -36,6 +36,71 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    /* ===== HEART LOADER ===== */
+    #loader{
+      position:fixed;
+      inset:0;
+      z-index:99999;
+      display:grid;
+      place-items:center;
+      background: linear-gradient(180deg, #fff0f6, #ffe3ef);
+      transition: opacity .28s ease;
+    }
+    #loader.hidden{ opacity:0; pointer-events:none; }
+    #loaderInner{
+      position:relative;
+      width:min(240px, 72vw);
+      aspect-ratio: 1/1;
+      display:grid;
+      place-items:center;
+    }
+    #loaderPct{
+      position:absolute;
+      font-weight:900;
+      letter-spacing:.2px;
+      color: rgba(178,31,85,0.90);
+      font-size:18px;
+      text-shadow: 0 10px 24px rgba(255,77,141,0.18);
+      user-select:none;
+    }
+    .heartShape{
+      width:160px;
+      height:160px;
+      transform: rotate(45deg) scale(0.22);
+      background: linear-gradient(135deg, var(--pink), var(--pink2));
+      border-radius: 18px;
+      box-shadow: 0 24px 80px rgba(255,77,141,0.28);
+      position:relative;
+      will-change: transform;
+      transition: transform .08s linear;
+    }
+    .heartShape::before,
+    .heartShape::after{
+      content:"";
+      position:absolute;
+      width:160px;
+      height:160px;
+      background: inherit;
+      border-radius: 50%;
+    }
+    .heartShape::before{ left:-80px; top:0; }
+    .heartShape::after{ top:-80px; left:0; }
+
+    #loaderFlash{
+      position:fixed;
+      inset:0;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.95), rgba(255,255,255,0));
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease;
+    }
+    #loaderFlash.on{ opacity:1; }
+
+    /* content hidden until loader done */
+    #app{ opacity:0; transform: translateY(6px); transition: opacity .35s ease, transform .35s ease; }
+    #app.ready{ opacity:1; transform: translateY(0); }
+
+    /* ===== FLOATING HEARTS BG ===== */
     .hearts{ position:fixed; inset:0; pointer-events:none; z-index:0; }
     .heart{
       position:absolute; bottom:-40px; font-size:22px; opacity:0.6;
@@ -506,87 +571,97 @@
 </head>
 
 <body>
-  <div class="hearts">
-    <div class="heart" style="left:10%; animation-duration:12s;">💗</div>
-    <div class="heart" style="left:25%; animation-duration:10s;">💖</div>
-    <div class="heart" style="left:40%; animation-duration:14s;">💘</div>
-    <div class="heart" style="left:55%; animation-duration:11s;">💞</div>
-    <div class="heart" style="left:70%; animation-duration:13s;">💓</div>
-    <div class="heart" style="left:85%; animation-duration:12s;">💗</div>
-  </div>
-
-  <div class="card" id="card">
-    <h1>will you be my valentine? &lt;3</h1>
-    <div id="waitMsg">thinking?</div>
-
-    <div class="stage" id="stage">
-      <button id="yesBtn" type="button">yes</button>
-      <button id="noBtn" type="button">no</button>
-    </div>
-
-    <div id="photoWrap">
-      <div id="clickMe">tap the photo</div>
-      <img id="yesPic" src="yes.jpg" alt="yes">
-      <img id="noPic" src="no.jpg" alt="no">
+  <div id="loader" aria-hidden="true">
+    <div id="loaderFlash"></div>
+    <div id="loaderInner">
+      <div class="heartShape" id="loaderHeart"></div>
+      <div id="loaderPct">0%</div>
     </div>
   </div>
 
-  <div id="letter">
-    <div id="letterHeader">
-      <h2 id="letterTitle">for luca</h2>
-      <button id="langBtn" type="button">polish</button>
+  <div id="app">
+    <div class="hearts">
+      <div class="heart" style="left:10%; animation-duration:12s;">💗</div>
+      <div class="heart" style="left:25%; animation-duration:10s;">💖</div>
+      <div class="heart" style="left:40%; animation-duration:14s;">💘</div>
+      <div class="heart" style="left:55%; animation-duration:11s;">💞</div>
+      <div class="heart" style="left:70%; animation-duration:13s;">💓</div>
+      <div class="heart" style="left:85%; animation-duration:12s;">💗</div>
     </div>
 
-    <div id="letterGrid">
-      <div id="paper">
-        <div class="fadeTop" id="fadeTop"></div>
-        <div class="fadeBottom" id="fadeBottom"></div>
+    <div class="card" id="card">
+      <h1>will you be my valentine? &lt;3</h1>
+      <div id="waitMsg">thinking?</div>
 
-        <div id="letterScroll">
-          <div id="letterText"></div>
-
-          <div id="signature">
-            <div class="yours" id="sigYours">yours,</div>
-            <div class="name" id="sigName">marta</div>
-          </div>
-        </div>
+      <div class="stage" id="stage">
+        <button id="yesBtn" type="button">yes</button>
+        <button id="noBtn" type="button">no</button>
       </div>
 
-      <div class="rightCol">
-        <div class="glassCard">
-          <div class="label">music that makes me think of you</div>
+      <div id="photoWrap">
+        <div id="clickMe">tap the photo</div>
+        <img id="yesPic" src="yes.jpg" alt="yes">
+        <img id="noPic" src="no.jpg" alt="no">
+      </div>
+    </div>
 
-          <iframe data-testid="embed-iframe"
-            style="border-radius:12px"
-            src="https://open.spotify.com/embed/playlist/2wSxwuUANGEvMWPhouZKA0?utm_source=generator"
-            width="100%"
-            height="152"
-            frameBorder="0"
-            allowfullscreen=""
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"></iframe>
+    <div id="letter">
+      <div id="letterHeader">
+        <h2 id="letterTitle">for luca</h2>
+        <button id="langBtn" type="button">polish</button>
+      </div>
+
+      <div id="letterGrid">
+        <div id="paper">
+          <div class="fadeTop" id="fadeTop"></div>
+          <div class="fadeBottom" id="fadeBottom"></div>
+
+          <div id="letterScroll">
+            <div id="letterText"></div>
+
+            <div id="signature">
+              <div class="yours" id="sigYours">yours,</div>
+              <div class="name" id="sigName">marta</div>
+            </div>
+          </div>
         </div>
 
-        <div class="glassCard">
-          <div class="label">one game?</div>
+        <div class="rightCol">
+          <div class="glassCard">
+            <div class="label">music that makes me think of you</div>
 
-          <div class="chessTop">
-            <div class="modeBtns">
-              <button class="modeBtn active" id="martaMode" type="button">marta mode</button>
-              <button class="modeBtn" id="lucaMode" type="button">luca mode</button>
+            <iframe data-testid="embed-iframe"
+              style="border-radius:12px"
+              src="https://open.spotify.com/embed/playlist/2wSxwuUANGEvMWPhouZKA0?utm_source=generator"
+              width="100%"
+              height="152"
+              frameBorder="0"
+              allowfullscreen=""
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"></iframe>
+          </div>
+
+          <div class="glassCard">
+            <div class="label">one game?</div>
+
+            <div class="chessTop">
+              <div class="modeBtns">
+                <button class="modeBtn active" id="martaMode" type="button">marta mode</button>
+                <button class="modeBtn" id="lucaMode" type="button">luca mode</button>
+              </div>
+              <button class="miniBtn" id="newGame" type="button">new game</button>
             </div>
-            <button class="miniBtn" id="newGame" type="button">new game</button>
-          </div>
 
-          <div class="capturedRow">
-            <div class="caps" id="capsYou"></div>
-            <div class="caps right" id="capsCpu"></div>
-          </div>
+            <div class="capturedRow">
+              <div class="caps" id="capsYou"></div>
+              <div class="caps right" id="capsCpu"></div>
+            </div>
 
-          <div class="chessboard" id="board"></div>
+            <div class="chessboard" id="board"></div>
 
-          <div class="chessRow">
-            <div class="status" id="status"></div>
+            <div class="chessRow">
+              <div class="status" id="status"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -596,6 +671,61 @@
   <script src="chess.min.js"></script>
 
   <script>
+    /* ===== LOADER ===== */
+    const loader = document.getElementById("loader");
+    const loaderHeart = document.getElementById("loaderHeart");
+    const loaderPct = document.getElementById("loaderPct");
+    const loaderFlash = document.getElementById("loaderFlash");
+    const app = document.getElementById("app");
+
+    const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function finishLoader(){
+      if(!prefersReduced){
+        loaderFlash.classList.add("on");
+        setTimeout(() => loaderFlash.classList.remove("on"), 160);
+      }
+      loader.classList.add("hidden");
+      app.classList.add("ready");
+      setTimeout(() => loader.remove(), 450);
+    }
+
+    (function runLoader(){
+      if(prefersReduced){
+        loaderPct.textContent = "100%";
+        loaderHeart.style.transform = "rotate(45deg) scale(6)";
+        finishLoader();
+        return;
+      }
+
+      let pct = 0;
+      const minMs = 900;
+      const maxMs = 1600;
+      const total = Math.floor(minMs + Math.random() * (maxMs - minMs));
+      const start = performance.now();
+
+      function tick(now){
+        const t = Math.min(1, (now - start) / total);
+        const eased = 1 - Math.pow(1 - t, 3);
+
+        pct = Math.round(eased * 100);
+        loaderPct.textContent = pct + "%";
+
+        const scale = 0.22 + eased * 6.2;
+        loaderHeart.style.transform = `rotate(45deg) scale(${scale})`;
+
+        if(t < 1){
+          requestAnimationFrame(tick);
+        }else{
+          loaderPct.textContent = "100%";
+          loaderHeart.style.transform = "rotate(45deg) scale(7.2)";
+          setTimeout(finishLoader, 110);
+        }
+      }
+      requestAnimationFrame(tick);
+    })();
+
+    /* ===== EXISTING APP ===== */
     const yesBtn = document.getElementById("yesBtn");
     const noBtn  = document.getElementById("noBtn");
     const stage  = document.getElementById("stage");
@@ -1154,9 +1284,6 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
       newGameBtn.addEventListener("click", startNewGame);
       setMode(1);
     }
-
-    moveNo();
-    applyLanguage();
   </script>
 </body>
 </html>
