@@ -14,8 +14,12 @@
       --border: rgba(255,77,141,0.25);
       --shadow: rgba(255,77,141,0.25);
 
-      --wPiece:#ff7fb0;   /* your pieces */
-      --bPiece:#b21f55;   /* computer pieces (still pink family) */
+      /* chess piece shades */
+      --youShadeName: "blush pink";
+      --cpuShadeName: "deep rose";
+      --youPiece:#ff7fb0;   /* you (blush pink) */
+      --cpuPiece:#c0175a;   /* computer (deep rose) */
+
       --boardLight: rgba(255,255,255,0.78);
       --boardDark: rgba(255,143,184,0.22);
     }
@@ -32,27 +36,14 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* floating hearts background */
-    .hearts{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:0;
-    }
+    .hearts{ position:fixed; inset:0; pointer-events:none; z-index:0; }
     .heart{
-      position:absolute;
-      bottom:-40px;
-      font-size:22px;
-      opacity:0.6;
+      position:absolute; bottom:-40px; font-size:22px; opacity:0.6;
       animation: floatUp linear infinite;
       filter: drop-shadow(0 10px 18px rgba(255,77,141,0.18));
     }
-    @keyframes floatUp{
-      from{ transform: translateY(0); }
-      to{ transform: translateY(-110vh); }
-    }
+    @keyframes floatUp{ from{ transform: translateY(0);} to{ transform: translateY(-110vh);} }
 
-    /* main question card */
     .card{
       width:min(620px, 92vw);
       padding:28px;
@@ -67,11 +58,7 @@
       z-index:2;
     }
 
-    h1{
-      margin:0 0 8px;
-      font-size:32px;
-      color:var(--dark);
-    }
+    h1{ margin:0 0 8px; font-size:32px; color:var(--dark); }
 
     #waitMsg{
       display:none;
@@ -106,7 +93,6 @@
       margin-top:56px;
       animation: wiggle 3.5s ease-in-out infinite;
     }
-
     @keyframes wiggle{
       0%,84%,100%{transform:rotate(0deg)}
       88%{transform:rotate(-2deg)}
@@ -121,13 +107,7 @@
       border:1px solid rgba(255,77,141,0.35);
     }
 
-    /* photo + delayed hint */
-    #photoWrap{
-      position:relative;
-      display:none;
-      margin-top:14px;
-    }
-
+    #photoWrap{ position:relative; display:none; margin-top:14px; }
     #yesPic, #noPic{
       display:none;
       max-width:100%;
@@ -136,7 +116,6 @@
       cursor:pointer;
     }
 
-    /* sign at top with arrow down */
     #clickMe{
       position:absolute;
       top:-52px;
@@ -172,16 +151,12 @@
       50%{ transform:translateX(-50%) translateY(-6px); }
     }
 
-    /* sparkle trail */
     .sparkle{
       position:fixed;
-      width:10px;
-      height:10px;
+      width:10px; height:10px;
       border-radius:999px;
       background: rgba(255,77,141,0.75);
-      box-shadow:
-        0 0 14px rgba(255,77,141,0.55),
-        0 0 30px rgba(255,143,184,0.35);
+      box-shadow: 0 0 14px rgba(255,77,141,0.55), 0 0 30px rgba(255,143,184,0.35);
       pointer-events:none;
       animation: sparkle 1100ms ease-out forwards;
       z-index:9999;
@@ -192,7 +167,6 @@
       to{opacity:0; transform:translate(-50%,-50%) scale(0.12)}
     }
 
-    /* heart explosion */
     .burst{
       position:fixed;
       font-size:20px;
@@ -205,7 +179,6 @@
       to{opacity:0; transform:translate(var(--x), var(--y)) scale(0.3)}
     }
 
-    /* LETTER AREA */
     #letter{
       display:none;
       width:min(1100px, 94vw);
@@ -228,12 +201,7 @@
       margin-bottom:12px;
     }
 
-    #letterTitle{
-      margin:0;
-      color:var(--dark);
-      font-size:22px;
-      letter-spacing:.2px;
-    }
+    #letterTitle{ margin:0; color:var(--dark); font-size:22px; letter-spacing:.2px; }
 
     #langBtn{
       background: rgba(255,77,141,0.12);
@@ -247,7 +215,6 @@
     }
     #langBtn:hover{ background: rgba(255,77,141,0.18); }
 
-    /* split layout: letter + right column */
     #letterGrid{
       display:grid;
       grid-template-columns: 1fr;
@@ -255,18 +222,11 @@
       align-items:start;
     }
     @media (min-width: 980px){
-      #letterGrid{
-        grid-template-columns: 1fr 380px;
-      }
+      #letterGrid{ grid-template-columns: 1fr 380px; }
     }
 
-    .rightCol{
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
+    .rightCol{ display:flex; flex-direction:column; gap:14px; }
 
-    /* paper */
     #paper{
       position:relative;
       border-radius:18px;
@@ -286,8 +246,7 @@
     #paper::before, #paper::after{
       content:"";
       position:absolute;
-      width:78px;
-      height:26px;
+      width:78px; height:26px;
       background: rgba(255,255,255,0.55);
       border: 1px solid rgba(255,77,141,0.16);
       box-shadow: 0 10px 18px rgba(255,77,141,0.12);
@@ -297,10 +256,7 @@
       pointer-events:none;
     }
     #paper::before{ left:14px; }
-    #paper::after{
-      right:14px;
-      transform: rotate(6deg);
-    }
+    #paper::after{ right:14px; transform: rotate(6deg); }
 
     #letterScroll{
       max-height: 60vh;
@@ -335,20 +291,12 @@
       font-family: ui-serif, Georgia, "Times New Roman", serif;
       color:var(--dark);
     }
-    #signature .yours{
-      font-style:italic;
-      font-weight:600;
-    }
-    #signature .name{
-      font-weight:800;
-      letter-spacing:.2px;
-    }
+    #signature .yours{ font-style:italic; font-weight:600; }
+    #signature .name{ font-weight:800; letter-spacing:.2px; }
 
     .fadeTop, .fadeBottom{
-      position:absolute;
-      left:0; right:0;
-      height:34px;
-      pointer-events:none;
+      position:absolute; left:0; right:0;
+      height:34px; pointer-events:none;
       z-index:4;
       transition: opacity .18s ease;
     }
@@ -363,7 +311,6 @@
       opacity:1;
     }
 
-    /* playlist card */
     .glassCard{
       padding:14px;
       border-radius:22px;
@@ -394,19 +341,12 @@
       letter-spacing:0.2px;
     }
 
-    .glassCard iframe{
-      position:relative;
-      border-radius:14px;
-    }
+    .glassCard iframe{ position:relative; border-radius:14px; }
 
     /* CHESS */
-    .chessWrap{
-      position:relative;
-    }
-
     .chessboard{
       position:relative;
-      width:100%;              /* fills the card */
+      width:100%;
       aspect-ratio: 1 / 1;
       display:grid;
       grid-template-columns: repeat(8, 1fr);
@@ -416,7 +356,7 @@
       box-shadow: 0 18px 40px rgba(255,77,141,0.18);
       background: rgba(255,255,255,0.6);
 
-      /* smaller board inside the card without centering shrink */
+      /* smaller but still fills the card */
       transform: scale(0.92);
       transform-origin: top center;
       margin-top:-6px;
@@ -490,7 +430,6 @@
     }
     .miniBtn:hover{ background: rgba(255,77,141,0.18); }
 
-    /* hearts on capture */
     .capHeart{
       position:absolute;
       font-size:16px;
@@ -555,6 +494,7 @@
       <div class="rightCol">
         <div class="glassCard">
           <div class="label">music that makes me think of you</div>
+
           <iframe data-testid="embed-iframe"
             style="border-radius:12px"
             src="https://open.spotify.com/embed/playlist/2wSxwuUANGEvMWPhouZKA0?utm_source=generator"
@@ -566,11 +506,11 @@
             loading="lazy"></iframe>
         </div>
 
-        <div class="glassCard chessWrap">
+        <div class="glassCard">
           <div class="label">one game?</div>
           <div class="chessboard" id="board"></div>
           <div class="chessRow">
-            <div class="status" id="status">your move (you are white)</div>
+            <div class="status" id="status"></div>
             <button class="miniBtn" id="newGame" type="button">new game</button>
           </div>
         </div>
@@ -578,7 +518,6 @@
     </div>
   </div>
 
-  <!-- IMPORTANT: keep chess.min.js next to index.html in your GitHub repo -->
   <script src="chess.min.js"></script>
 
   <script>
@@ -605,7 +544,9 @@
     const fadeTop = document.getElementById("fadeTop");
     const fadeBottom = document.getElementById("fadeBottom");
 
-    /* PUT YOUR FULL LETTERS HERE */
+    const youShadeName = getComputedStyle(document.documentElement).getPropertyValue("--youShadeName").trim().replaceAll('"','');
+    const cpuShadeName = getComputedStyle(document.documentElement).getPropertyValue("--cpuShadeName").trim().replaceAll('"','');
+
     const englishLetter = `Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
 
 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
@@ -624,7 +565,6 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
 
 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.`;
 
-    /* idle “thinking?” */
     let waitTimer = setTimeout(() => { waitMsg.style.display = "block"; }, 5000);
     function resetWait(){
       clearTimeout(waitTimer);
@@ -632,7 +572,6 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       waitTimer = setTimeout(() => { waitMsg.style.display = "block"; }, 5000);
     }
 
-    /* runaway NO (desktop + mobile) */
     function moveNo(e){
       if(e) e.preventDefault();
       resetWait();
@@ -648,7 +587,6 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
     noBtn.addEventListener("pointerdown", moveNo, { passive:false });
     noBtn.addEventListener("pointerenter", moveNo, { passive:false });
 
-    /* heart explosion */
     function heartExplosion(x, y){
       const hearts = ["💗","💖","💘","💞","💓"];
       for(let i=0;i<20;i++){
@@ -664,12 +602,9 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       }
     }
 
-    /* click-me timer */
     let clickTimer = null;
-
     yesBtn.addEventListener("click", (e) => {
       resetWait();
-
       photoWrap.style.display = "block";
       yesPic.style.display = "block";
       noPic.style.display = "none";
@@ -683,7 +618,6 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       heartExplosion(cx, cy);
     });
 
-    /* letter scroll fades */
     function updateFades(){
       const top = letterScroll.scrollTop;
       const max = letterScroll.scrollHeight - letterScroll.clientHeight;
@@ -692,7 +626,6 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
     }
     letterScroll.addEventListener("scroll", updateFades);
 
-    /* language toggle */
     let isPolish = false;
     function applyLanguage(){
       if(isPolish){
@@ -716,7 +649,6 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       applyLanguage();
     });
 
-    /* open letter after photo click */
     yesPic.addEventListener("click", () => {
       if(clickTimer) clearTimeout(clickTimer);
       card.style.display = "none";
@@ -726,7 +658,6 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       initChessOnce();
     });
 
-    /* sparkle trail */
     let last = 0;
     function spawnSparkle(x, y){
       const s = document.createElement("div");
@@ -753,7 +684,6 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       if(Math.random() < 0.35) spawnSparkle(t.clientX + (Math.random()*18-9), t.clientY + (Math.random()*18-9));
     }, { passive:true });
 
-    /* init */
     moveNo();
     applyLanguage();
 
@@ -766,6 +696,34 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
     let selected = null;
     let legalTargets = new Set();
     let thinking = false;
+
+    // Compatibility across chess.js builds
+    function isGameOver(g){
+      return (typeof g.isGameOver === "function") ? g.isGameOver()
+           : (typeof g.game_over === "function") ? g.game_over()
+           : false;
+    }
+    function inCheckmate(g){
+      return (typeof g.isCheckmate === "function") ? g.isCheckmate()
+           : (typeof g.in_checkmate === "function") ? g.in_checkmate()
+           : false;
+    }
+    function inDraw(g){
+      const a = (typeof g.isDraw === "function") ? g.isDraw() : false;
+      const b = (typeof g.in_draw === "function") ? g.in_draw() : false;
+      const c = (typeof g.isStalemate === "function") ? g.isStalemate() : false;
+      const d = (typeof g.in_stalemate === "function") ? g.in_stalemate() : false;
+      const e = (typeof g.isThreefoldRepetition === "function") ? g.isThreefoldRepetition() : false;
+      const f = (typeof g.in_threefold_repetition === "function") ? g.in_threefold_repetition() : false;
+      const h = (typeof g.isInsufficientMaterial === "function") ? g.isInsufficientMaterial() : false;
+      const i = (typeof g.insufficient_material === "function") ? g.insufficient_material() : false;
+      return a || b || c || d || e || f || h || i;
+    }
+    function inCheck(g){
+      return (typeof g.isCheck === "function") ? g.isCheck()
+           : (typeof g.in_check === "function") ? g.in_check()
+           : false;
+    }
 
     function squareColor(file, rank){ return ((file + rank) % 2 === 0) ? "light" : "darkSq"; }
 
@@ -796,7 +754,7 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       if(moves.length === 0) return null;
 
       function negamax(d){
-        if(d === 0 || game.isGameOver()) return materialEval(game);
+        if(d === 0 || isGameOver(game)) return materialEval(game);
         let best = -Infinity;
         const ms = game.moves({ verbose:true });
         for(const m of ms){
@@ -823,11 +781,10 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
     }
 
     function pieceSvg(type, color){
-      const fill = color === "w" ? getComputedStyle(document.documentElement).getPropertyValue("--wPiece").trim()
-                                : getComputedStyle(document.documentElement).getPropertyValue("--bPiece").trim();
+      const fill = color === "w"
+        ? getComputedStyle(document.documentElement).getPropertyValue("--youPiece").trim()
+        : getComputedStyle(document.documentElement).getPropertyValue("--cpuPiece").trim();
 
-      // Cute minimal “icons” per piece type (stylized, not realistic)
-      // All kept pink + soft.
       const svg = (shape) => `
         <svg class="pieceSvg" viewBox="0 0 100 100" aria-hidden="true">
           <defs>
@@ -881,8 +838,7 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
 
     function renderBoard(){
       if(!chess) return;
-
-      const b = chess.board(); // rank 8 -> 1
+      const b = chess.board();
       boardEl.innerHTML = "";
 
       for(let r = 0; r < 8; r++){
@@ -899,7 +855,6 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
           if(p){
             sq.innerHTML = pieceSvg(p.type, p.color);
           }
-
           boardEl.appendChild(sq);
         }
       }
@@ -917,19 +872,25 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
     function updateGameStateText(){
       if(!chess) return;
 
-      if(chess.isCheckmate()){
+      if(inCheckmate(chess)){
         setStatus(chess.turn() === "w" ? "checkmate — you lost 😭" : "checkmate — you won 💗");
         return;
       }
-      if(chess.isDraw() || chess.isStalemate() || chess.isThreefoldRepetition() || chess.isInsufficientMaterial()){
+      if(inDraw(chess)){
         setStatus("draw 🤍");
         return;
       }
-      if(chess.isCheck()){
-        setStatus(chess.turn() === "w" ? "your move — (check!)" : "computer — (check!)");
+      if(inCheck(chess)){
+        setStatus(chess.turn() === "w"
+          ? `your move (${youShadeName}) — (check!)`
+          : `computer (${cpuShadeName}) — (check!)`
+        );
         return;
       }
-      setStatus(chess.turn() === "w" ? "your move (you are white)" : "computer is thinking…");
+      setStatus(chess.turn() === "w"
+        ? `your move (${youShadeName})`
+        : `computer (${cpuShadeName}) is thinking…`
+      );
     }
 
     function captureHeartsAtSquare(square){
@@ -950,6 +911,33 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
         document.body.appendChild(h);
         setTimeout(() => h.remove(), 720);
       }
+    }
+
+    function doComputerMove(){
+      if(!chess || thinking) return;
+      if(chess.turn() !== "b") return;
+      if(isGameOver(chess)) return;
+
+      thinking = true;
+      updateGameStateText();
+
+      setTimeout(() => {
+        try{
+          const best = pickComputerMove(chess, 2);
+          const cm = best ? chess.move(best) : null;
+          renderBoard();
+          if(cm && cm.captured) captureHeartsAtSquare(cm.to);
+        }catch(err){
+          // fallback: random legal move if minimax fails for any reason
+          const ms = chess.moves({ verbose:true });
+          const m = ms.length ? ms[Math.floor(Math.random()*ms.length)] : null;
+          const cm = m ? chess.move(m) : null;
+          renderBoard();
+          if(cm && cm.captured) captureHeartsAtSquare(cm.to);
+        }
+        thinking = false;
+        updateGameStateText();
+      }, 260);
     }
 
     function tryPlayerClick(square){
@@ -983,26 +971,7 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
         if(wasCapture) captureHeartsAtSquare(toSq);
 
         updateGameStateText();
-
-        thinking = true;
-        setTimeout(() => {
-          if(chess.isGameOver()){
-            thinking = false;
-            updateGameStateText();
-            return;
-          }
-
-          const best = pickComputerMove(chess, 2); // gentle
-          if(best){
-            const cm = chess.move(best);
-            renderBoard();
-            if(cm && cm.captured) captureHeartsAtSquare(cm.to);
-          }
-
-          thinking = false;
-          updateGameStateText();
-        }, 260);
-
+        doComputerMove();
       }else{
         if(piece && piece.color === "w"){
           selected = square;
