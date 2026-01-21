@@ -30,7 +30,6 @@
       font-size:22px;
       opacity:0.6;
       animation: floatUp linear infinite;
-      filter: drop-shadow(0 10px 18px rgba(255,77,141,0.18));
     }
     @keyframes floatUp{
       from{ transform: translateY(0); }
@@ -105,14 +104,13 @@
       border:1px solid rgba(255,77,141,0.35);
     }
 
-    /* photo + delayed hint (on top, arrow down) */
     #photoWrap{
       position:relative;
       display:none;
       margin-top:14px;
     }
 
-    #yesPic, #noPic{
+    #yesPic{
       display:none;
       max-width:100%;
       border-radius:16px;
@@ -147,42 +145,12 @@
       border-left:8px solid transparent;
       border-right:8px solid transparent;
       border-top:10px solid rgba(255,255,255,0.95);
-      filter: drop-shadow(0 2px 2px rgba(255,77,141,0.25));
     }
     @keyframes bob{
       0%,100%{ transform:translateX(-50%) translateY(0); }
       50%{ transform:translateX(-50%) translateY(-6px); }
     }
 
-    .sparkle{
-      position:fixed;
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background: rgba(255,77,141,0.7);
-      box-shadow:0 0 16px rgba(255,77,141,0.6);
-      pointer-events:none;
-      animation: sparkle 900ms ease-out forwards;
-      z-index:9999;
-    }
-    @keyframes sparkle{
-      from{opacity:1; transform:scale(1)}
-      to{opacity:0; transform:scale(0.1)}
-    }
-
-    .burst{
-      position:fixed;
-      font-size:20px;
-      pointer-events:none;
-      animation: burst 900ms ease-out forwards;
-      z-index:9999;
-    }
-    @keyframes burst{
-      from{opacity:1; transform:translate(0,0) scale(1)}
-      to{opacity:0; transform:translate(var(--x), var(--y)) scale(0.3)}
-    }
-
-    /* letter view */
     #letter{
       display:none;
       width:min(860px, 94vw);
@@ -201,14 +169,11 @@
       margin:0 0 12px;
       color:#b21f55;
       font-size:22px;
-      letter-spacing:.2px;
     }
 
     #paper{
-      position:relative;
       border-radius:18px;
-      overflow:hidden;
-      border: 1px solid rgba(255,77,141,0.18);
+      border:1px solid rgba(255,77,141,0.18);
       background:
         repeating-linear-gradient(
           180deg,
@@ -218,43 +183,10 @@
           rgba(255,77,141,0.06) 28px
         );
       box-shadow: 0 18px 45px rgba(255,77,141,0.18);
-    }
-
-    #paper::before, #paper::after{
-      content:"";
-      position:absolute;
-      width:78px;
-      height:26px;
-      background: rgba(255,255,255,0.55);
-      border: 1px solid rgba(255,77,141,0.16);
-      box-shadow: 0 10px 18px rgba(255,77,141,0.12);
-      transform: rotate(-6deg);
-      top:10px;
-      z-index:3;
-      pointer-events:none;
-    }
-    #paper::before{ left:14px; }
-    #paper::after{
-      right:14px;
-      transform: rotate(6deg);
-    }
-
-    #letterScroll{
-      max-height: 60vh;
-      overflow:auto;
       padding:22px 18px 16px;
-      position:relative;
-      z-index:2;
-      scrollbar-width: thin;
+      max-height:60vh;
+      overflow:auto;
     }
-
-    #letterScroll::-webkit-scrollbar{ width:10px; }
-    #letterScroll::-webkit-scrollbar-thumb{
-      background: rgba(178,31,85,0.28);
-      border-radius:999px;
-      border: 3px solid rgba(255,255,255,0.55);
-    }
-    #letterScroll::-webkit-scrollbar-track{ background: transparent; }
 
     #letterText{
       white-space:pre-wrap;
@@ -266,53 +198,32 @@
 
     #signature{
       margin-top:18px;
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      align-items:flex-end;
+      text-align:right;
       font-family: ui-serif, Georgia, "Times New Roman", serif;
       color:#b21f55;
     }
-    #signature .yours{
-      font-style:italic;
-      font-weight:600;
-    }
-    #signature .name{
-      font-weight:800;
-      letter-spacing:.2px;
+
+    .spotify-wrap{
+      margin-top:22px;
+      padding:14px;
+      border-radius:22px;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border:1px solid rgba(255,77,141,0.28);
+      box-shadow: 0 20px 45px rgba(255,77,141,0.22);
     }
 
-    .fadeTop, .fadeBottom{
-      position:absolute;
-      left:0; right:0;
-      height:34px;
-      pointer-events:none;
-      z-index:4;
-      transition: opacity .18s ease;
-    }
-    .fadeTop{
-      top:0;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0));
-      opacity:0;
-    }
-    .fadeBottom{
-      bottom:0;
-      background: linear-gradient(0deg, rgba(255,255,255,0.98), rgba(255,255,255,0));
-      opacity:1;
+    .spotify-wrap iframe{
+      border-radius:14px;
     }
 
-    #langBtn{
-      margin-top:14px;
-      background: rgba(255,77,141,0.12);
-      border:1px solid rgba(255,77,141,0.35);
+    .playlist-label{
+      text-align:center;
+      margin-bottom:10px;
+      font-weight:700;
       color:#b21f55;
-      padding:10px 16px;
-      border-radius:999px;
-      font-weight:800;
-      cursor:pointer;
-    }
-    #langBtn:hover{
-      background: rgba(255,77,141,0.18);
+      font-size:14px;
     }
   </style>
 </head>
@@ -320,11 +231,10 @@
 <body>
   <div class="hearts">
     <div class="heart" style="left:10%; animation-duration:12s;">💗</div>
-    <div class="heart" style="left:25%; animation-duration:10s;">💖</div>
-    <div class="heart" style="left:40%; animation-duration:14s;">💘</div>
-    <div class="heart" style="left:55%; animation-duration:11s;">💞</div>
-    <div class="heart" style="left:70%; animation-duration:13s;">💓</div>
-    <div class="heart" style="left:85%; animation-duration:12s;">💗</div>
+    <div class="heart" style="left:30%; animation-duration:10s;">💖</div>
+    <div class="heart" style="left:50%; animation-duration:14s;">💘</div>
+    <div class="heart" style="left:70%; animation-duration:11s;">💞</div>
+    <div class="heart" style="left:85%; animation-duration:13s;">💓</div>
   </div>
 
   <div class="card" id="card">
@@ -332,222 +242,83 @@
     <div id="waitMsg">thinking?</div>
 
     <div class="stage" id="stage">
-      <button id="yesBtn" type="button">yes</button>
-      <button id="noBtn" type="button">no</button>
+      <button id="yesBtn">yes</button>
+      <button id="noBtn">no</button>
     </div>
 
     <div id="photoWrap">
       <div id="clickMe">tap the photo</div>
       <img id="yesPic" src="yes.jpg" alt="yes">
-      <img id="noPic" src="no.jpg" alt="no">
     </div>
   </div>
 
   <div id="letter">
-    <h2 id="letterTitle">for luca</h2>
+    <h2>for luca</h2>
 
     <div id="paper">
-      <div class="fadeTop" id="fadeTop"></div>
-      <div class="fadeBottom" id="fadeBottom"></div>
+      <div id="letterText">
+Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+      </div>
 
-      <div id="letterScroll">
-        <div id="letterText"></div>
-
-        <div id="signature">
-          <div class="yours" id="sigYours">yours,</div>
-          <div class="name" id="sigName">marta</div>
-        </div>
+      <div id="signature">
+        <div>yours,</div>
+        <strong>marta</strong>
       </div>
     </div>
 
-    <button id="langBtn" type="button">polish</button>
+    <div class="spotify-wrap">
+      <div class="playlist-label">music that makes me think of you</div>
+      <iframe
+        src="https://open.spotify.com/embed/playlist/2wSxwuUANGEvMWPhouZKA0?utm_source=generator&theme=0"
+        width="100%"
+        height="352"
+        frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy">
+      </iframe>
+    </div>
   </div>
 
   <script>
     const yesBtn = document.getElementById("yesBtn");
-    const noBtn  = document.getElementById("noBtn");
-    const stage  = document.getElementById("stage");
+    const noBtn = document.getElementById("noBtn");
+    const stage = document.getElementById("stage");
     const yesPic = document.getElementById("yesPic");
-    const noPic  = document.getElementById("noPic");
-    const waitMsg = document.getElementById("waitMsg");
-
-    const photoWrap = document.getElementById("photoWrap");
-    const clickMe = document.getElementById("clickMe");
-
     const card = document.getElementById("card");
     const letter = document.getElementById("letter");
-    const letterScroll = document.getElementById("letterScroll");
-    const fadeTop = document.getElementById("fadeTop");
-    const fadeBottom = document.getElementById("fadeBottom");
+    const photoWrap = document.getElementById("photoWrap");
+    const clickMe = document.getElementById("clickMe");
+    const waitMsg = document.getElementById("waitMsg");
 
-    const langBtn = document.getElementById("langBtn");
-    const letterText = document.getElementById("letterText");
-    const letterTitle = document.getElementById("letterTitle");
-    const sigYours = document.getElementById("sigYours");
-    const sigName = document.getElementById("sigName");
-
-    const englishLetter = `Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.`;
-
-    const polishLetter = `Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.`;
-
-    let isPolish = false;
-
-    function applyLanguage(){
-      if(isPolish){
-        letterTitle.textContent = "dla luca";
-        sigYours.textContent = "twoja,";
-        sigName.textContent = "marta";
-        langBtn.textContent = "english";
-        letterText.textContent = polishLetter;
-      }else{
-        letterTitle.textContent = "for luca";
-        sigYours.textContent = "yours,";
-        sigName.textContent = "marta";
-        langBtn.textContent = "polish";
-        letterText.textContent = englishLetter;
-      }
-      letterScroll.scrollTop = 0;
-      updateFades();
+    function moveNo(){
+      const maxX = stage.clientWidth - noBtn.offsetWidth;
+      const maxY = stage.clientHeight - noBtn.offsetHeight;
+      noBtn.style.left = Math.random() * maxX + "px";
+      noBtn.style.top  = Math.random() * maxY + "px";
     }
+
+    noBtn.addEventListener("mouseenter", moveNo);
+    noBtn.addEventListener("pointerdown", moveNo);
 
     let waitTimer = setTimeout(() => {
       waitMsg.style.display = "block";
     }, 5000);
 
-    function resetWait(){
+    yesBtn.addEventListener("click", () => {
       clearTimeout(waitTimer);
-      waitMsg.style.display = "none";
-    }
-
-    function heartExplosion(x, y){
-      const hearts = ["💗","💖","💘","💞","💓"];
-      for(let i=0;i<18;i++){
-        const h = document.createElement("div");
-        h.className = "burst";
-        h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
-        h.style.left = x + "px";
-        h.style.top  = y + "px";
-        h.style.setProperty("--x", (Math.random()*220-110)+"px");
-        h.style.setProperty("--y", (Math.random()*-240-60)+"px");
-        document.body.appendChild(h);
-        setTimeout(() => h.remove(), 900);
-      }
-    }
-
-    function moveNo(e){
-      if(e) e.preventDefault();
-      resetWait();
-      const maxX = Math.max(0, stage.clientWidth  - noBtn.offsetWidth);
-      const maxY = Math.max(0, stage.clientHeight - noBtn.offsetHeight);
-      noBtn.style.left = (Math.random() * maxX) + "px";
-      noBtn.style.top  = (Math.random() * maxY) + "px";
-    }
-
-    noBtn.addEventListener("mouseenter", moveNo, { passive:false });
-    noBtn.addEventListener("mousedown", moveNo, { passive:false });
-    noBtn.addEventListener("click", moveNo, { passive:false });
-    noBtn.addEventListener("touchstart", moveNo, { passive:false });
-    noBtn.addEventListener("pointerdown", moveNo, { passive:false });
-    noBtn.addEventListener("pointerenter", moveNo, { passive:false });
-
-    let clickTimer = null;
-
-    yesBtn.addEventListener("click", (e) => {
-      resetWait();
-
       photoWrap.style.display = "block";
       yesPic.style.display = "block";
-      noPic.style.display = "none";
-
       clickMe.style.display = "none";
-      if(clickTimer) clearTimeout(clickTimer);
-      clickTimer = setTimeout(() => {
+      setTimeout(() => {
         clickMe.style.display = "block";
       }, 5000);
-
-      heartExplosion(e.clientX, e.clientY);
     });
 
     yesPic.addEventListener("click", () => {
-      if(clickTimer) clearTimeout(clickTimer);
       card.style.display = "none";
       letter.style.display = "block";
-      applyLanguage();
     });
 
-    function updateFades(){
-      const top = letterScroll.scrollTop;
-      const max = letterScroll.scrollHeight - letterScroll.clientHeight;
-      fadeTop.style.opacity = top > 6 ? "1" : "0";
-      fadeBottom.style.opacity = top < max - 6 ? "1" : "0";
-    }
-
-    letterScroll.addEventListener("scroll", updateFades);
-
-    langBtn.addEventListener("click", () => {
-      isPolish = !isPolish;
-      applyLanguage();
-    });
-
-    let last = 0;
-    document.addEventListener("mousemove", (e) => {
-      const now = performance.now();
-      if(now - last < 20) return;
-      last = now;
-
-      const s = document.createElement("div");
-      s.className = "sparkle";
-      s.style.left = e.clientX + "px";
-      s.style.top  = e.clientY + "px";
-      document.body.appendChild(s);
-      setTimeout(() => s.remove(), 1000);
-    });
-
-    document.addEventListener("touchmove", (e) => {
-      const t = e.touches && e.touches[0];
-      if(!t) return;
-
-      const now = performance.now();
-      if(now - last < 25) return;
-      last = now;
-
-      const s = document.createElement("div");
-      s.className = "sparkle";
-      s.style.left = t.clientX + "px";
-      s.style.top  = t.clientY + "px";
-      document.body.appendChild(s);
-      setTimeout(() => s.remove(), 1000);
-    }, { passive:true });
-
-    applyLanguage();
     moveNo();
   </script>
 </body>
