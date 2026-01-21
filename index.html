@@ -45,6 +45,7 @@
       place-items:center;
       background: linear-gradient(180deg, #fff0f6, #ffe3ef);
       transition: opacity .35s ease;
+      overflow: hidden
     }
     #loader.hidden{ opacity:0; pointer-events:none; }
     #loaderInner{
@@ -63,28 +64,27 @@
       text-shadow: 0 10px 24px rgba(255,77,141,0.18);
       user-select:none;
     }
-    .heartShape{
-      width:160px;
-      height:160px;
-      transform: rotate(45deg) scale(0.22);
-      background: linear-gradient(135deg, var(--pink), var(--pink2));
-      border-radius: 18px;
-      box-shadow: 0 24px 80px rgba(255,77,141,0.28);
-      position:relative;
-      will-change: transform;
-      transition: transform .08s linear;
-    }
-    .heartShape::before,
-    .heartShape::after{
-      content:"";
-      position:absolute;
-      width:160px;
-      height:160px;
-      background: inherit;
-      border-radius: 50%;
-    }
-    .heartShape::before{ left:-80px; top:0; }
-    .heartShape::after{ top:-80px; left:0; }
+  .heartShape{
+  width:160px;
+  height:160px;
+  transform: rotate(45deg) scale(0.18);
+  background: #ff4d8d; /* solid pink */
+  border-radius: 18px;
+  box-shadow: 0 30px 120px rgba(255,77,141,0.45);
+  position:relative;
+  will-change: transform;
+}
+.heartShape::before,
+.heartShape::after{
+  content:"";
+  position:absolute;
+  width:160px;
+  height:160px;
+  background:#ff4d8d;
+  border-radius:50%;
+}
+.heartShape::before{ left:-80px; top:0; }
+.heartShape::after{ top:-80px; left:0; }
 
     #loaderFlash{
       position:fixed;
@@ -1327,5 +1327,6 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
   </script>
 </body>
 </html>
+
 
 
