@@ -30,7 +30,8 @@
       place-items:center;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background: linear-gradient(180deg, #fff0f6, #ffe3ef);
-      overflow:hidden;
+      overflow-y:auto;           /* page can scroll */
+      overflow-x:hidden;
       cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='2' y='22' font-size='20'>%F0%9F%92%97</text></svg>") 4 20, auto;
       -webkit-tap-highlight-color: transparent;
     }
@@ -45,6 +46,7 @@
 
     .card{
       width:min(620px, 92vw);
+      margin: 26px 0;
       padding:28px;
       border-radius:22px;
       background: rgba(255,255,255,0.55);
@@ -183,6 +185,7 @@
     #letter{
       display:none;
       width:min(1100px, 94vw);
+      margin: 26px 0;
       padding:22px 18px 18px;
       border-radius:22px;
       background: rgba(255,255,255,0.72);
@@ -259,7 +262,6 @@
     #paper::before{ left:14px; }
     #paper::after{ right:14px; transform: rotate(6deg); }
 
-    /* IMPORTANT: scrolling letter area */
     #letterScroll{
       max-height: 62vh;
       overflow:auto;
@@ -345,6 +347,63 @@
 
     .glassCard iframe{ position:relative; border-radius:14px; }
 
+    .chessTop{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:10px;
+      position:relative;
+      z-index:2;
+    }
+    .modeBtns{ display:flex; gap:8px; }
+    .modeBtn{
+      border:none;
+      border-radius:999px;
+      padding:8px 10px;
+      font-size:12px;
+      font-weight:900;
+      cursor:pointer;
+      background: rgba(255,77,141,0.12);
+      border:1px solid rgba(255,77,141,0.28);
+      color:var(--dark);
+      white-space:nowrap;
+    }
+    .modeBtn.active{
+      background: linear-gradient(135deg, rgba(255,77,141,0.30), rgba(255,143,184,0.26));
+      border-color: rgba(255,77,141,0.40);
+    }
+
+    .capturedRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin: 4px 0 10px;
+      position:relative;
+      z-index:2;
+    }
+    .caps{
+      flex:1;
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      align-items:center;
+      min-height:18px;
+    }
+    .caps.right{ justify-content:flex-end; }
+    .capIcon{
+      width:16px; height:16px;
+      border-radius:6px;
+      background: rgba(255,255,255,0.55);
+      border:1px solid rgba(255,77,141,0.22);
+      display:grid;
+      place-items:center;
+      font-size:11px;
+      line-height:1;
+      box-shadow: 0 8px 18px rgba(255,77,141,0.12);
+    }
+
     .chessboard{
       position:relative;
       width:100%;
@@ -404,7 +463,9 @@
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      margin-top:6px;
+      margin-top:10px;
+      position:relative;
+      z-index:2;
     }
 
     .status{
@@ -508,10 +569,24 @@
 
         <div class="glassCard">
           <div class="label">one game?</div>
+
+          <div class="chessTop">
+            <div class="modeBtns">
+              <button class="modeBtn active" id="martaMode" type="button">marta mode</button>
+              <button class="modeBtn" id="lucaMode" type="button">luca mode</button>
+            </div>
+            <button class="miniBtn" id="newGame" type="button">new game</button>
+          </div>
+
+          <div class="capturedRow">
+            <div class="caps" id="capsYou"></div>
+            <div class="caps right" id="capsCpu"></div>
+          </div>
+
           <div class="chessboard" id="board"></div>
+
           <div class="chessRow">
             <div class="status" id="status"></div>
-            <button class="miniBtn" id="newGame" type="button">new game</button>
           </div>
         </div>
       </div>
@@ -547,7 +622,6 @@
     const youShadeName = getComputedStyle(document.documentElement).getPropertyValue("--youShadeName").trim().replaceAll('"','');
     const cpuShadeName = getComputedStyle(document.documentElement).getPropertyValue("--cpuShadeName").trim().replaceAll('"','');
 
-    /* FULL letters (scrollable) */
     const englishLetter = `Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
 
 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
@@ -671,6 +745,7 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       applyLanguage();
       updateFades();
       initChessOnce();
+      setTimeout(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, 50);
     });
 
     let last = 0;
@@ -706,11 +781,41 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
     const boardEl = document.getElementById("board");
     const statusEl = document.getElementById("status");
     const newGameBtn = document.getElementById("newGame");
+    const martaModeBtn = document.getElementById("martaMode");
+    const lucaModeBtn = document.getElementById("lucaMode");
+
+    const capsYouEl = document.getElementById("capsYou");
+    const capsCpuEl = document.getElementById("capsCpu");
 
     let chess = null;
     let selected = null;
     let legalTargets = new Set();
     let thinking = false;
+
+    let aiDepth = 1; /* marta mode = easy */
+    const capIcons = { p:"♟", n:"♞", b:"♝", r:"♜", q:"♛", k:"♚" };
+
+    let capsYou = [];
+    let capsCpu = [];
+
+    function setMode(depth){
+      aiDepth = depth;
+      if(depth === 1){
+        martaModeBtn.classList.add("active");
+        lucaModeBtn.classList.remove("active");
+      }else{
+        lucaModeBtn.classList.add("active");
+        martaModeBtn.classList.remove("active");
+      }
+      updateGameStateText();
+    }
+    martaModeBtn.addEventListener("click", () => setMode(1));
+    lucaModeBtn.addEventListener("click", () => setMode(3));
+
+    function renderCaptured(){
+      capsYouEl.innerHTML = capsYou.map(t => `<span class="capIcon">${capIcons[t] || "♟"}</span>`).join("");
+      capsCpuEl.innerHTML = capsCpu.map(t => `<span class="capIcon">${capIcons[t] || "♟"}</span>`).join("");
+    }
 
     function isGameOver(g){
       return (typeof g.isGameOver === "function") ? g.isGameOver()
@@ -910,7 +1015,7 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       }
       setStatus(chess.turn() === "w"
         ? `your move (${youShadeName})`
-        : `computer (${cpuShadeName}) is thinking…`
+        : `computer (${cpuShadeName}) is thinking… (${aiDepth === 1 ? "marta mode" : "luca mode"})`
       );
     }
 
@@ -944,16 +1049,24 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
 
       setTimeout(() => {
         try{
-          const best = pickComputerMove(chess, 2);
+          const best = pickComputerMove(chess, aiDepth);
           const cm = best ? chess.move(best) : null;
           renderBoard();
-          if(cm && cm.captured) captureHeartsAtSquare(cm.to);
+          if(cm && cm.captured){
+            capsCpu.push(cm.captured);
+            renderCaptured();
+            captureHeartsAtSquare(cm.to);
+          }
         }catch(err){
           const ms = chess.moves({ verbose:true });
           const m = ms.length ? ms[Math.floor(Math.random()*ms.length)] : null;
           const cm = m ? chess.move(m) : null;
           renderBoard();
-          if(cm && cm.captured) captureHeartsAtSquare(cm.to);
+          if(cm && cm.captured){
+            capsCpu.push(cm.captured);
+            renderCaptured();
+            captureHeartsAtSquare(cm.to);
+          }
         }
         thinking = false;
         updateGameStateText();
@@ -988,7 +1101,12 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
 
         clearSelectionUI();
         renderBoard();
-        if(wasCapture) captureHeartsAtSquare(toSq);
+
+        if(wasCapture){
+          capsYou.push(move.captured);
+          renderCaptured();
+          captureHeartsAtSquare(toSq);
+        }
 
         updateGameStateText();
         doComputerMove();
@@ -1023,6 +1141,9 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       selected = null;
       legalTargets.clear();
       thinking = false;
+      capsYou = [];
+      capsCpu = [];
+      renderCaptured();
       renderBoard();
       updateGameStateText();
     }
@@ -1039,9 +1160,11 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
 
       chess = new Chess();
       wireBoardClicks();
+      renderCaptured();
       renderBoard();
       updateGameStateText();
       newGameBtn.addEventListener("click", startNewGame);
+      setMode(1);
     }
   </script>
 </body>
