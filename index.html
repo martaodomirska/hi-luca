@@ -690,13 +690,53 @@
       setTimeout(() => loader.remove(), 450);
     }
 
-    (function runLoader(){
-      if(prefersReduced){
-        loaderPct.textContent = "100%";
-        loaderHeart.style.transform = "rotate(45deg) scale(6)";
+   (function runLoader(){
+  const prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if(prefersReduced){
+    loaderPct.textContent = "100%";
+    loaderHeart.style.transform = "rotate(45deg) scale(12)";
+    finishLoader();
+    return;
+  }
+
+  let pct = 0;
+
+  // slower + intentional
+  const total = 2300 + Math.random() * 300; // 2.3–2.6s
+  const start = performance.now();
+
+  function tick(now){
+    const t = Math.min(1, (now - start) / total);
+    const eased = 1 - Math.pow(1 - t, 3); // ease-out
+
+    pct = Math.round(eased * 100);
+    loaderPct.textContent = pct + "%";
+
+    // grow steadily
+    const scale = 0.18 + eased * 5.6;
+    loaderHeart.style.transform = `rotate(45deg) scale(${scale})`;
+
+    if(t < 1){
+      requestAnimationFrame(tick);
+    }else{
+      // final cinematic expansion
+      loaderPct.textContent = "100%";
+      loaderPct.style.opacity = "0";
+
+      loaderHeart.style.transition = "transform 420ms ease-in";
+      loaderHeart.style.transform = "rotate(45deg) scale(18)";
+
+      setTimeout(() => {
         finishLoader();
-        return;
-      }
+      }, 420);
+    }
+  }
+
+  requestAnimationFrame(tick);
+})();
 
       let pct = 0;
       const minMs = 900;
@@ -1287,4 +1327,5 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
   </script>
 </body>
 </html>
+
 
