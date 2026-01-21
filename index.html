@@ -45,7 +45,7 @@
       place-items:center;
       background: linear-gradient(180deg, #fff0f6, #ffe3ef);
       transition: opacity .35s ease;
-      overflow: hidden;
+      overflow:hidden;
     }
     #loader.hidden{ opacity:0; pointer-events:none; }
     #loaderInner{
@@ -59,32 +59,33 @@
       position:absolute;
       font-weight:900;
       letter-spacing:.2px;
-      color: rgba(178,31,85,0.90);
+      color: rgba(178,31,85,0.92);
       font-size:18px;
       text-shadow: 0 10px 24px rgba(255,77,141,0.18);
       user-select:none;
+      transition: opacity .2s ease;
     }
-  .heartShape{
-  width:160px;
-  height:160px;
-  transform: rotate(45deg) scale(0.18);
-  background: #ff4d8d; /* solid pink */
-  border-radius: 18px;
-  box-shadow: 0 30px 120px rgba(255,77,141,0.45);
-  position:relative;
-  will-change: transform;
-}
-.heartShape::before,
-.heartShape::after{
-  content:"";
-  position:absolute;
-  width:160px;
-  height:160px;
-  background:#ff4d8d;
-  border-radius:50%;
-}
-.heartShape::before{ left:-80px; top:0; }
-.heartShape::after{ top:-80px; left:0; }
+    .heartShape{
+      width:160px;
+      height:160px;
+      transform: rotate(45deg) scale(0.18);
+      background:#ff4d8d; /* solid pink */
+      border-radius:18px;
+      box-shadow:0 30px 120px rgba(255,77,141,0.45);
+      position:relative;
+      will-change: transform;
+    }
+    .heartShape::before,
+    .heartShape::after{
+      content:"";
+      position:absolute;
+      width:160px;
+      height:160px;
+      background:#ff4d8d;
+      border-radius:50%;
+    }
+    .heartShape::before{ left:-80px; top:0; }
+    .heartShape::after{ top:-80px; left:0; }
 
     #loaderFlash{
       position:fixed;
@@ -159,6 +160,7 @@
       margin-top:56px;
       animation: wiggle 3.5s ease-in-out infinite;
     }
+
     @keyframes wiggle{
       0%,84%,100%{transform:rotate(0deg)}
       88%{transform:rotate(-2deg)}
@@ -221,17 +223,17 @@
       position:fixed;
       width:7px; height:7px;
       border-radius:999px;
-      background: rgba(255,77,141,0.22);
+      background: rgba(255,77,141,0.18);
       box-shadow:
-        0 0 10px rgba(255,77,141,0.18),
-        0 0 22px rgba(255,143,184,0.14);
+        0 0 10px rgba(255,77,141,0.14),
+        0 0 22px rgba(255,143,184,0.12);
       pointer-events:none;
-      animation: sparkle 800ms ease-out forwards;
+      animation: sparkle 850ms ease-out forwards;
       z-index:9999;
       mix-blend-mode: multiply;
     }
     @keyframes sparkle{
-      from{opacity:0.9; transform:translate(-50%,-50%) scale(1)}
+      from{opacity:0.8; transform:translate(-50%,-50%) scale(1)}
       to{opacity:0; transform:translate(-50%,-50%) scale(0.15)}
     }
 
@@ -690,78 +692,44 @@
       setTimeout(() => loader.remove(), 450);
     }
 
-   (function runLoader(){
-  const prefersReduced =
-    window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    (function runLoader(){
+      const prefersReduced =
+        window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if(prefersReduced){
-    loaderPct.textContent = "100%";
-    loaderHeart.style.transform = "rotate(45deg) scale(12)";
-    finishLoader();
-    return;
-  }
-
-  let pct = 0;
-
-  // slower + intentional
-  const total = 2300 + Math.random() * 300; // 2.3–2.6s
-  const start = performance.now();
-
-  function tick(now){
-    const t = Math.min(1, (now - start) / total);
-    const eased = 1 - Math.pow(1 - t, 3); // ease-out
-
-    pct = Math.round(eased * 100);
-    loaderPct.textContent = pct + "%";
-
-    // grow steadily
-    const scale = 0.18 + eased * 5.6;
-    loaderHeart.style.transform = `rotate(45deg) scale(${scale})`;
-
-    if(t < 1){
-      requestAnimationFrame(tick);
-    }else{
-      // final cinematic expansion
-      loaderPct.textContent = "100%";
-      loaderPct.style.opacity = "0";
-
-      loaderHeart.style.transition = "transform 420ms ease-in";
-      loaderHeart.style.transform = "rotate(45deg) scale(18)";
-
-      setTimeout(() => {
+      if(prefersReduced){
+        loaderPct.textContent = "100%";
+        loaderHeart.style.transform = "rotate(45deg) scale(12)";
         finishLoader();
-      }, 420);
-    }
-  }
+        return;
+      }
 
-  requestAnimationFrame(tick);
-})();
-
-      let pct = 0;
-      const minMs = 900;
-      const maxMs = 1600;
-      const total = Math.floor(minMs + Math.random() * (maxMs - minMs));
+      const total = 2300 + Math.random() * 300; // 2.3–2.6s
       const start = performance.now();
 
       function tick(now){
         const t = Math.min(1, (now - start) / total);
         const eased = 1 - Math.pow(1 - t, 3);
 
-        pct = Math.round(eased * 100);
+        const pct = Math.round(eased * 100);
         loaderPct.textContent = pct + "%";
 
-        const scale = 0.22 + eased * 6.2;
+        const scale = 0.18 + eased * 5.6;
         loaderHeart.style.transform = `rotate(45deg) scale(${scale})`;
 
         if(t < 1){
           requestAnimationFrame(tick);
         }else{
           loaderPct.textContent = "100%";
-          loaderHeart.style.transform = "rotate(45deg) scale(7.2)";
-          setTimeout(finishLoader, 110);
+          loaderPct.style.opacity = "0";
+
+          loaderHeart.style.transition = "transform 520ms ease-in";
+          loaderHeart.style.transform = "rotate(45deg) scale(20)";
+
+          setTimeout(() => finishLoader(), 520);
         }
       }
+
       requestAnimationFrame(tick);
     })();
 
@@ -917,19 +885,19 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
     }
     document.addEventListener("mousemove", (e) => {
       const now = performance.now();
-      if(now - last < 22) return;
+      if(now - last < 26) return;
       last = now;
       spawnSparkle(e.clientX, e.clientY);
-      if(Math.random() < 0.18) spawnSparkle(e.clientX + (Math.random()*14-7), e.clientY + (Math.random()*14-7));
+      if(Math.random() < 0.14) spawnSparkle(e.clientX + (Math.random()*14-7), e.clientY + (Math.random()*14-7));
     });
     document.addEventListener("touchmove", (e) => {
       const t = e.touches && e.touches[0];
       if(!t) return;
       const now = performance.now();
-      if(now - last < 24) return;
+      if(now - last < 28) return;
       last = now;
       spawnSparkle(t.clientX, t.clientY);
-      if(Math.random() < 0.18) spawnSparkle(t.clientX + (Math.random()*14-7), t.clientY + (Math.random()*14-7));
+      if(Math.random() < 0.14) spawnSparkle(t.clientX + (Math.random()*14-7), t.clientY + (Math.random()*14-7));
     }, { passive:true });
 
     moveNo();
@@ -1327,7 +1295,3 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
   </script>
 </body>
 </html>
-
-
-
-
