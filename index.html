@@ -241,7 +241,7 @@
     }
     #langBtn:hover{ background: rgba(255,77,141,0.18); }
 
-    /* split layout: letter + playlist */
+    /* split layout: letter + right column */
     #letterGrid{
       display:grid;
       grid-template-columns: 1fr;
@@ -252,6 +252,12 @@
       #letterGrid{
         grid-template-columns: 1fr 380px;
       }
+    }
+
+    .rightCol{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
     }
 
     /* paper */
@@ -386,6 +392,150 @@
       position:relative;
       border-radius:14px;
     }
+
+    /* CHESS card */
+    .chess-wrap{
+      padding:14px;
+      border-radius:22px;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border:1px solid rgba(255,77,141,0.28);
+      box-shadow: 0 20px 45px rgba(255,77,141,0.22);
+      position:relative;
+      overflow:hidden;
+    }
+    .chess-wrap::before{
+      content:"";
+      position:absolute;
+      inset:-80px;
+      background: radial-gradient(circle at 25% 25%, rgba(255,77,141,0.14), transparent 55%),
+                  radial-gradient(circle at 75% 75%, rgba(255,143,184,0.14), transparent 55%);
+      pointer-events:none;
+    }
+
+    .chess-label{
+      position:relative;
+      text-align:center;
+      margin-bottom:10px;
+      font-weight:900;
+      color:var(--dark);
+      font-size:14px;
+      letter-spacing:0.2px;
+    }
+
+    .chess-ui{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .chessboard{
+      position:relative;
+      width:100%;
+      max-width:320px;
+      aspect-ratio: 1 / 1;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns: repeat(8, 1fr);
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(255,77,141,0.22);
+      box-shadow: 0 18px 40px rgba(255,77,141,0.18);
+      background: rgba(255,255,255,0.6);
+    }
+
+    .sq{
+      display:grid;
+      place-items:center;
+      font-size:24px;
+      line-height:1;
+      cursor:pointer;
+      user-select:none;
+      position:relative;
+    }
+
+    .light{
+      background: rgba(255,255,255,0.72);
+    }
+    .darkSq{
+      background: rgba(255,143,184,0.18);
+    }
+
+    .sq::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:0;
+      transition: opacity .12s ease;
+      background: radial-gradient(circle at 50% 50%, rgba(255,77,141,0.20), transparent 60%);
+    }
+
+    .sq.sel::after{
+      opacity:1;
+      background: radial-gradient(circle at 50% 50%, rgba(255,77,141,0.28), transparent 62%);
+    }
+
+    .sq.hl::after{
+      opacity:1;
+      background: radial-gradient(circle at 50% 50%, rgba(178,31,85,0.22), transparent 62%);
+    }
+
+    .piece{
+      filter: drop-shadow(0 6px 10px rgba(255,77,141,0.18));
+      transform: translateY(-1px);
+    }
+
+    .chess-row{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:2px;
+    }
+
+    .miniBtn{
+      border:none;
+      border-radius:999px;
+      padding:9px 12px;
+      font-size:13px;
+      font-weight:900;
+      cursor:pointer;
+      background: rgba(255,77,141,0.12);
+      border:1px solid rgba(255,77,141,0.28);
+      color:var(--dark);
+      white-space:nowrap;
+    }
+    .miniBtn:hover{ background: rgba(255,77,141,0.18); }
+
+    .status{
+      flex:1;
+      font-size:12.5px;
+      font-weight:800;
+      color: rgba(178,31,85,0.92);
+      text-align:left;
+      opacity:0.95;
+    }
+
+    .status small{
+      font-weight:800;
+      opacity:0.8;
+    }
+
+    .fallback{
+      position:relative;
+      font-size:12.5px;
+      color:rgba(178,31,85,0.92);
+      font-weight:800;
+      text-align:center;
+      padding:10px 8px;
+      border:1px dashed rgba(255,77,141,0.35);
+      border-radius:16px;
+      background: rgba(255,255,255,0.5);
+    }
   </style>
 </head>
 
@@ -436,21 +586,43 @@
         </div>
       </div>
 
-      <div class="spotify-wrap">
-        <div class="playlist-label">music that makes me think of you</div>
+      <div class="rightCol">
+        <div class="spotify-wrap">
+          <div class="playlist-label">music that makes me think of you</div>
 
-        <iframe data-testid="embed-iframe"
-          style="border-radius:12px"
-          src="https://open.spotify.com/embed/playlist/2wSxwuUANGEvMWPhouZKA0?utm_source=generator"
-          width="100%"
-          height="152"
-          frameBorder="0"
-          allowfullscreen=""
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy"></iframe>
+          <iframe data-testid="embed-iframe"
+            style="border-radius:12px"
+            src="https://open.spotify.com/embed/playlist/2wSxwuUANGEvMWPhouZKA0?utm_source=generator"
+            width="100%"
+            height="152"
+            frameBorder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"></iframe>
+        </div>
+
+        <div class="chess-wrap" id="chessCard">
+          <div class="chess-label">one game?</div>
+
+          <div class="chess-ui" id="chessUI">
+            <div class="chessboard" id="board"></div>
+
+            <div class="chess-row">
+              <div class="status" id="status">your move <small>(you are white)</small></div>
+              <button class="miniBtn" id="newGame" type="button">new game</button>
+            </div>
+          </div>
+
+          <div class="fallback" id="chessFallback" style="display:none;">
+            chess didn’t load (try refreshing / open via github pages)
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- chess rules engine (runs in browser; used for legal moves + computer) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
 
   <script>
     const yesBtn = document.getElementById("yesBtn");
@@ -600,9 +772,10 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
       letter.style.display = "block";
       applyLanguage();
       updateFades();
+      initChessOnce();
     });
 
-    /* sparkle trail (longer/denser, everywhere) */
+    /* sparkle trail (denser, everywhere) */
     let last = 0;
     function spawnSparkle(x, y){
       const s = document.createElement("div");
@@ -637,6 +810,252 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
     /* init */
     moveNo();
     applyLanguage();
+
+    /* ===== MINI CHESS (you = white, computer = black) ===== */
+    const boardEl = document.getElementById("board");
+    const statusEl = document.getElementById("status");
+    const newGameBtn = document.getElementById("newGame");
+    const chessFallback = document.getElementById("chessFallback");
+    const chessUI = document.getElementById("chessUI");
+
+    let chess = null;
+    let chessReady = false;
+    let selected = null;
+    let legalTargets = new Set();
+    let thinking = false;
+
+    const pieceToUnicode = {
+      p:"♟", r:"♜", n:"♞", b:"♝", q:"♛", k:"♚",
+      P:"♙", R:"♖", N:"♘", B:"♗", Q:"♕", K:"♔"
+    };
+
+    function squareColor(file, rank){ return ((file + rank) % 2 === 0) ? "light" : "darkSq"; }
+
+    function clearSelectionUI(){
+      selected = null;
+      legalTargets.clear();
+      [...boardEl.querySelectorAll(".sq")].forEach(s => { s.classList.remove("sel","hl"); });
+    }
+
+    function setStatus(text){
+      statusEl.textContent = text;
+    }
+
+    function materialEval(game){
+      const vals = { p:100, n:320, b:330, r:500, q:900, k:0 };
+      let score = 0;
+      const b = game.board();
+      for(const row of b){
+        for(const p of row){
+          if(!p) continue;
+          const v = vals[p.type] || 0;
+          score += (p.color === "w") ? v : -v;
+        }
+      }
+      return score;
+    }
+
+    function pickComputerMove(game, depth){
+      const moves = game.moves({ verbose:true });
+      if(moves.length === 0) return null;
+
+      function negamax(d){
+        if(d === 0 || game.isGameOver()){
+          return materialEval(game);
+        }
+        let best = -Infinity;
+        const ms = game.moves({ verbose:true });
+        for(const m of ms){
+          game.move(m);
+          const val = -negamax(d - 1);
+          game.undo();
+          if(val > best) best = val;
+        }
+        return best;
+      }
+
+      let bestMove = moves[0];
+      let bestScore = Infinity; // black wants LOW (because eval is from white perspective)
+      for(const m of moves){
+        game.move(m);
+        const score = negamax(depth - 1);
+        game.undo();
+        if(score < bestScore){
+          bestScore = score;
+          bestMove = m;
+        }
+      }
+      return bestMove;
+    }
+
+    function renderBoard(){
+      if(!chess) return;
+
+      const b = chess.board(); // rank 8 -> 1
+      boardEl.innerHTML = "";
+
+      for(let r = 0; r < 8; r++){
+        for(let f = 0; f < 8; f++){
+          const sq = document.createElement("div");
+          sq.className = "sq " + squareColor(f, r);
+
+          const fileChar = "abcdefgh"[f];
+          const rankChar = String(8 - r);
+          const name = fileChar + rankChar;
+          sq.dataset.square = name;
+
+          const p = b[r][f];
+          if(p){
+            const key = (p.color === "w") ? p.type.toUpperCase() : p.type;
+            const span = document.createElement("span");
+            span.className = "piece";
+            span.textContent = pieceToUnicode[key] || "";
+            sq.appendChild(span);
+          }
+
+          boardEl.appendChild(sq);
+        }
+      }
+
+      // re-apply highlights if needed
+      if(selected){
+        const selEl = boardEl.querySelector(`.sq[data-square="${selected}"]`);
+        if(selEl) selEl.classList.add("sel");
+        for(const t of legalTargets){
+          const tEl = boardEl.querySelector(`.sq[data-square="${t}"]`);
+          if(tEl) tEl.classList.add("hl");
+        }
+      }
+    }
+
+    function updateGameStateText(){
+      if(!chess) return;
+
+      if(chess.isCheckmate()){
+        setStatus(chess.turn() === "w" ? "checkmate — you lost 😭" : "checkmate — you won 💗");
+        return;
+      }
+      if(chess.isDraw() || chess.isStalemate() || chess.isThreefoldRepetition() || chess.isInsufficientMaterial()){
+        setStatus("draw 🤍");
+        return;
+      }
+      if(chess.isCheck()){
+        setStatus(chess.turn() === "w" ? "your move — (check!)" : "computer — (check!)");
+        return;
+      }
+      setStatus(chess.turn() === "w" ? "your move (you are white)" : "computer is thinking…");
+    }
+
+    function tryPlayerClick(square){
+      if(!chess || thinking) return;
+      if(chess.turn() !== "w") return;
+
+      const piece = chess.get(square);
+
+      // selecting a piece
+      if(!selected){
+        if(piece && piece.color === "w"){
+          selected = square;
+          legalTargets = new Set(
+            chess.moves({ square:selected, verbose:true }).map(m => m.to)
+          );
+          renderBoard();
+        }
+        return;
+      }
+
+      // clicking same square cancels
+      if(square === selected){
+        clearSelectionUI();
+        renderBoard();
+        return;
+      }
+
+      // attempt move
+      const move = chess.move({ from:selected, to:square, promotion:"q" });
+      if(move){
+        clearSelectionUI();
+        renderBoard();
+        updateGameStateText();
+
+        // computer move
+        thinking = true;
+        setTimeout(() => {
+          if(chess.isGameOver()){
+            thinking = false;
+            updateGameStateText();
+            return;
+          }
+
+          const best = pickComputerMove(chess, 2); // subtle/easy-ish
+          if(best) chess.move(best);
+
+          thinking = false;
+          renderBoard();
+          updateGameStateText();
+        }, 260);
+      }else{
+        // if clicked another white piece, switch selection
+        if(piece && piece.color === "w"){
+          selected = square;
+          legalTargets = new Set(
+            chess.moves({ square:selected, verbose:true }).map(m => m.to)
+          );
+          renderBoard();
+          return;
+        }
+        // otherwise cancel
+        clearSelectionUI();
+        renderBoard();
+      }
+    }
+
+    function wireBoardClicks(){
+      boardEl.addEventListener("click", (e) => {
+        const sq = e.target.closest(".sq");
+        if(!sq) return;
+        tryPlayerClick(sq.dataset.square);
+      });
+
+      // better on touch: allow tap, no dragging needed
+      boardEl.addEventListener("touchstart", (e) => {
+        const sq = e.target.closest(".sq");
+        if(!sq) return;
+        tryPlayerClick(sq.dataset.square);
+      }, { passive:true });
+    }
+
+    function startNewGame(){
+      if(!chess) return;
+      chess.reset();
+      selected = null;
+      legalTargets.clear();
+      thinking = false;
+      renderBoard();
+      updateGameStateText();
+    }
+
+    let chessInitDone = false;
+    function initChessOnce(){
+      if(chessInitDone) return;
+      chessInitDone = true;
+
+      // chess.js needs to be available
+      if(typeof Chess !== "function"){
+        chessUI.style.display = "none";
+        chessFallback.style.display = "block";
+        return;
+      }
+
+      chess = new Chess();
+      chessReady = true;
+
+      wireBoardClicks();
+      renderBoard();
+      updateGameStateText();
+
+      newGameBtn.addEventListener("click", startNewGame);
+    }
   </script>
 </body>
 </html>
