@@ -69,7 +69,7 @@
       width:160px;
       height:160px;
       transform: rotate(45deg) scale(0.18);
-      background:#ff4d8d; /* solid pink */
+      background:#ff4d8d;
       border-radius:18px;
       box-shadow:0 30px 120px rgba(255,77,141,0.45);
       position:relative;
@@ -175,23 +175,29 @@
       border:1px solid rgba(255,77,141,0.35);
     }
 
-   #photoWrap{
-  position:relative;
-  display:none;
-  margin-top:14px;
+    /* ===== PHOTO (CENTERED) ===== */
+    #photoWrap{
+      position:relative;
+      display:none;            /* hidden until YES */
+      margin-top:14px;
+      width:100%;
 
-  /* CENTER THE PHOTO */
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  width:100%;
-}
+      /* center the photo */
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+    }
+
     #yesPic, #noPic{
-      display:none;
+      display:none;            /* JS controls which one shows */
       max-width:100%;
       border-radius:16px;
       box-shadow:0 16px 40px rgba(255,77,141,0.25);
       cursor:pointer;
+
+      /* ensure true centering */
+      display:block;
+      margin:0 auto;
     }
 
     #clickMe{
@@ -714,7 +720,7 @@
         return;
       }
 
-      const total = 2300 + Math.random() * 300; // 2.3–2.6s
+      const total = 2300 + Math.random() * 300;
       const start = performance.now();
 
       function tick(now){
@@ -830,7 +836,10 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
     let clickTimer = null;
     yesBtn.addEventListener("click", (e) => {
       resetWait();
-      photoWrap.style.display = "block";
+
+      /* show photo area as FLEX so it centers */
+      photoWrap.style.display = "flex";
+
       yesPic.style.display = "block";
       noPic.style.display = "none";
 
@@ -1305,4 +1314,3 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
   </script>
 </body>
 </html>
-
