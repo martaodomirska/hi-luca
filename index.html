@@ -181,21 +181,19 @@
       display:none;            /* hidden until YES */
       margin-top:14px;
       width:100%;
-
-      /* center the photo */
       justify-content:center;
       align-items:center;
       text-align:center;
     }
 
     #yesPic, #noPic{
-      display:none;            /* JS controls which one shows */
+      display:none;
       max-width:100%;
       border-radius:16px;
       box-shadow:0 16px 40px rgba(255,77,141,0.25);
       cursor:pointer;
 
-      /* ensure true centering */
+      /* true centering */
       display:block;
       margin:0 auto;
     }
@@ -487,6 +485,11 @@
       box-shadow: 0 8px 18px rgba(255,77,141,0.12);
     }
 
+    /* Wrap board so overlay can sit on top */
+    .boardWrap{
+      position:relative;
+    }
+
     .chessboard{
       position:relative;
       width:100%;
@@ -503,6 +506,24 @@
       transform-origin: top center;
       margin-top:-6px;
       margin-bottom:-10px;
+      z-index:1;
+    }
+
+    /* ===== YOU WIN PHOTO OVERLAY ===== */
+    #youWinOverlay{
+      position:absolute;
+      inset:0;
+      display:none;
+      z-index:10;
+      border-radius:18px;
+      overflow:hidden;
+      pointer-events:none;
+    }
+    #youWinOverlay img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
     }
 
     .sq{
@@ -675,7 +696,14 @@
               <div class="caps right" id="capsCpu"></div>
             </div>
 
-            <div class="chessboard" id="board"></div>
+            <div class="boardWrap">
+              <div class="chessboard" id="board"></div>
+
+              <!-- IMPORTANT: put you-win.jpg next to this HTML file -->
+              <div id="youWinOverlay" aria-hidden="true">
+                <img src="you-win.jpg" alt="you win">
+              </div>
+            </div>
 
             <div class="chessRow">
               <div class="status" id="status"></div>
@@ -837,7 +865,6 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
     yesBtn.addEventListener("click", (e) => {
       resetWait();
 
-      /* show photo area as FLEX so it centers */
       photoWrap.style.display = "flex";
 
       yesPic.style.display = "block";
@@ -924,6 +951,23 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
 
     /* ===== MINI CHESS ===== */
     const boardEl = document.getElementById("board");
+    const youWinOverlay = document.getElementById("youWinOverlay");
+    let youOverlayShownThisGame = false;
+    let youOverlayTimer = null;
+
+    function showYouWinOverlay(){
+      if(!youWinOverlay) return;
+      if(youOverlayShownThisGame) return;
+
+      youOverlayShownThisGame = true;
+      youWinOverlay.style.display = "block";
+
+      if(youOverlayTimer) clearTimeout(youOverlayTimer);
+      youOverlayTimer = setTimeout(() => {
+        youWinOverlay.style.display = "none";
+      }, 7000);
+    }
+
     const statusEl = document.getElementById("status");
     const newGameBtn = document.getElementById("newGame");
     const martaModeBtn = document.getElementById("martaMode");
@@ -937,7 +981,7 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
     let legalTargets = new Set();
     let thinking = false;
 
-    let aiDepth = 1;
+    let aiDepth = 1; // 1 = marta mode, 3 = luca mode
     const capIcons = { p:"♟", n:"♞", b:"♝", r:"♜", q:"♛", k:"♚" };
 
     let capsYou = [];
@@ -1144,9 +1188,18 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
       if(!chess) return;
 
       if(inCheckmate(chess)){
-        setStatus(chess.turn() === "w" ? "checkmate — you lost 😭" : "checkmate — you won 💗");
+        const youLost = (chess.turn() === "w"); // white to move & checkmated => you lost
+        const youWon  = !youLost;              // black to move & checkmated => you won
+
+        setStatus(youLost ? "checkmate — you lost 😭" : "checkmate — you won 💗");
+
+        // Show photo only when YOU win AND luca mode is active (aiDepth === 3)
+        if(youWon && aiDepth === 3){
+          showYouWinOverlay();
+        }
         return;
       }
+
       if(inDraw(chess)){
         setStatus("draw 🤍");
         return;
@@ -1290,6 +1343,12 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
       capsCpu = [];
       renderCaptured();
       renderBoard();
+
+      /* reset overlay state */
+      youOverlayShownThisGame = false;
+      if(youOverlayTimer) clearTimeout(youOverlayTimer);
+      if(youWinOverlay) youWinOverlay.style.display = "none";
+
       updateGameStateText();
     }
 
