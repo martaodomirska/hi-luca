@@ -99,6 +99,7 @@
     #app{ opacity:0; transform: translateY(6px); transition: opacity .35s ease, transform .35s ease; }
     #app.ready{ opacity:1; transform: translateY(0); }
 
+    /* ===== floating hearts bg ===== */
     .hearts{ position:fixed; inset:0; pointer-events:none; z-index:0; }
     .heart{
       position:absolute; bottom:-40px; font-size:22px; opacity:0.6;
@@ -174,7 +175,7 @@
 
     #photoWrap{
       position:relative;
-      display:none;     
+      display:none;
       margin-top:14px;
       width:100%;
       justify-content:center;
@@ -189,7 +190,6 @@
       box-shadow:0 16px 40px rgba(255,77,141,0.25);
       cursor:pointer;
 
-      /* true centering */
       display:block;
       margin:0 auto;
     }
@@ -303,11 +303,24 @@
       align-items:start;
     }
     @media (min-width: 980px){
-      #letterGrid{ grid-template-columns: 1fr 380px; }
+      /* key change: stretch so left side can be the same height as right side */
+      #letterGrid{
+        grid-template-columns: minmax(0, 1fr) 380px;
+        align-items:stretch;
+      }
     }
 
     .rightCol{ display:flex; flex-direction:column; gap:14px; }
-    .leftCol{ display:flex; flex-direction:column; gap:16px; }
+
+    .leftCol{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      min-height:0;
+    }
+    @media (min-width: 980px){
+      .leftCol{ height:100%; }
+    }
 
     #paper{
       position:relative;
@@ -482,10 +495,7 @@
       box-shadow: 0 8px 18px rgba(255,77,141,0.12);
     }
 
-    /* Wrap board so overlay can sit on top */
-    .boardWrap{
-      position:relative;
-    }
+    .boardWrap{ position:relative; }
 
     .chessboard{
       position:relative;
@@ -626,6 +636,17 @@
     }
     #countdownInner{ position:relative; z-index:1; }
 
+    /* key change: on desktop, make it stretch to the bottom of the chess card (the black outline area) */
+    @media (min-width: 980px){
+      #countdownWrap{
+        flex:1;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        min-height:0;
+      }
+    }
+
     #countdownTitle{
       font-size:14px;
       font-weight:900;
@@ -721,7 +742,6 @@
             </div>
           </div>
 
-          <!-- countdown is here (matches the left column width, doesn’t affect chess) -->
           <div id="countdownWrap" aria-live="polite">
             <div id="countdownInner">
               <div id="countdownTitle">until we meet</div>
@@ -931,7 +951,6 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
       resetWait();
 
       photoWrap.style.display = "flex";
-
       yesPic.style.display = "block";
       noPic.style.display = "none";
 
@@ -1008,7 +1027,7 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
       if(now - last < 28) return;
       last = now;
       spawnSparkle(t.clientX, t.clientY);
-      if(Math.random() < 0.14) spawnSparkle(t.clientX + (Math.random()*14-7), t.clientY + (Math.random()*14-7));
+      if(Math.random() < 0.14) spawnSparkle(t.clientX + (Math.random()*14-7), t.clientX + (Math.random()*14-7));
     }, { passive:true });
 
     moveNo();
@@ -1016,7 +1035,6 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
 
     const countdownDaysEl = document.getElementById("countdownDays");
     const countdownBtn = document.getElementById("countdownBtn");
-
     const meetTarget = new Date("2026-05-01T00:00:00");
 
     function updateCountdown(){
@@ -1026,7 +1044,6 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
       const days = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
       countdownDaysEl.textContent = days + " days";
     }
-
     updateCountdown();
     setInterval(updateCountdown, 60 * 1000);
 
@@ -1373,7 +1390,8 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
       }
 
       if(square === selected){
-        clearSelectionUI();
+        selected = null;
+        legalTargets.clear();
         renderBoard();
         return;
       }
@@ -1383,7 +1401,8 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
         const wasCapture = !!move.captured;
         const toSq = move.to;
 
-        clearSelectionUI();
+        selected = null;
+        legalTargets.clear();
         renderBoard();
 
         if(wasCapture){
@@ -1401,7 +1420,8 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
           renderBoard();
           return;
         }
-        clearSelectionUI();
+        selected = null;
+        legalTargets.clear();
         renderBoard();
       }
     }
@@ -1458,6 +1478,7 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
   </script>
 </body>
 </html>
+
 
 
 
