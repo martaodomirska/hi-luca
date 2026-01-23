@@ -22,7 +22,9 @@
       --boardLight: rgba(255,255,255,0.78);
       --boardDark: rgba(255,143,184,0.22);
     }
-*, *::before, *::after { box-sizing: border-box; }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
     body{
       margin:0;
       min-height:100vh;
@@ -613,6 +615,7 @@
       to{ opacity:0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0.35); }
     }
 
+    /* ===== countdown card ===== */
     #countdownWrap{
       width:100%;
       padding:22px 18px;
@@ -634,7 +637,9 @@
                   radial-gradient(circle at 70% 80%, rgba(255,143,184,0.12), transparent 55%);
       pointer-events:none;
     }
-    #countdownInner{ position:relative; z-index:1; }
+
+    /* keep text above skyline */
+    #countdownInner{ position:relative; z-index:2; padding-bottom:74px; }
 
     /* key change: on desktop, make it stretch to the bottom of the chess card (the black outline area) */
     @media (min-width: 980px){
@@ -645,6 +650,7 @@
         justify-content:center;
         min-height:0;
       }
+      #countdownInner{ width:100%; }
     }
 
     #countdownTitle{
@@ -682,6 +688,22 @@
       text-transform:none;
     }
     #countdownBtn:hover{ background: rgba(255,77,141,0.18); }
+
+    /* ===== chicago skyline silhouette (pink) ===== */
+    #chicagoSkyline{
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:-2px;
+      width:100%;
+      height:92px;
+      z-index:1;
+      pointer-events:none;
+      opacity:1;
+    }
+    #chicagoSkyline path{
+      fill: rgba(255,77,141,0.22);
+    }
   </style>
 </head>
 
@@ -749,6 +771,30 @@
               <div id="countdownSub">may 1st, 2026</div>
               <button id="countdownBtn" type="button">too slow?</button>
             </div>
+
+            <!-- chicago skyline silhouette -->
+            <svg id="chicagoSkyline" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+              <path d="
+                M0,200
+                L0,140
+                L40,140 L40,120 L70,120 L70,140
+                L110,140 L110,90 L150,90 L150,140
+                L200,140 L200,60 L240,60 L240,140
+                L300,140 L300,80 L330,80 L330,140
+                L360,140 L360,30 L410,30 L410,140
+                L460,140 L460,100 L490,100 L490,140
+                L540,140 L540,70 L570,70 L570,140
+                L610,140 L610,40 L650,40 L650,140
+                L700,140 L700,90 L730,90 L730,140
+                L780,140 L780,110 L820,110 L820,140
+                L860,140 L860,50 L900,50 L900,140
+                L960,140 L960,80 L1000,80 L1000,140
+                L1040,140 L1040,100 L1080,100 L1080,140
+                L1120,140 L1120,120 L1160,120 L1160,140
+                L1200,140
+                L1200,200
+                Z"/>
+            </svg>
           </div>
         </div>
 
@@ -901,7 +947,8 @@ We haven’t known each other for long - but I’m choosing to be curious instea
 
     const polishLetter = `Pewnie brzmi to trochę banalnie. Ale jako samozwańcza prezeska Klubu Anty-Nonchalancji jestem właściwie zobowiązana, żeby to zrobić.
 Nie wiem, czy kiedykolwiek opowiadałam Ci o pierwszym razie, kiedy Cię zobaczyłam. A nawet jeśli - i tak usłyszysz to jeszcze raz. Wracałam do hostelu po jakimś talk show, kiedy Cię zauważyłam: stałeś tam i rozmawiałeś z innym chłopakiem. To właśnie ten moment sprawił, że w ogóle poszłam na imprezę powitalną. Pomyślałam, że jesteś uroczy, ale po cichu pogodziłam się z tym, że to donikąd nie doprowadzi. A jednak - w jakiś sposób te kolejne dwa dni stały się jednymi z najlepszych dni w moim życiu. I zupełnie się tego nie spodziewałam.
-Na początku wydawałeś się zainteresowany. Potem zdystansowany. Odpisywałeś, ale po sześciu godzinach zostawiania mnie na wyświetlonym. Mówiłeś, że chcesz stabilnej emocjonalnej relacji, a potem stawałeś się oschły. Ciepło - zimno. Nie będę udawać, że mnie to nie przestraszyło. Dotknęło to czegoś we mnie – tej części, która zawsze czeka, aż wszystko nagle się skończy, bez ostrzeżenia. Może dlatego czasem czuję, że to wszystko może zniknąć w jednej chwili. Może wciąż uczę się, jak wygląda bezpieczna relacja i mylę spokój z utratą. Zwłaszcza na odległość - trudno nie mieć wątpliwości, kiedy wybierasz kogoś tak daleko, mając dziewczyny na wyciągnięcie ręki (a do tego masz Wenus w Bliźniętach, a Tiktok twierdzi, że to oznacza zdradzanie).
+Na początku wydawałeś się zainteresowany. Potem zdystansowany. Odpisywałeś, ale po sześciu godzinach zostawiania mnie na wyświetlonym. Mówiłeś, że chcesz stabilnej emocjonalnej relacji, a potem stawałeś się oschły. Ciepło - zimno. Nie będę udawać, że mnie to nie przestraszyło. Dotknęło to czegoś we mnie – tej części, która zawsze czeka, aż wszystko nagle się skończy, bez ostrzeżenia. Może dlatego czasem czuję, że to wszystko może zniknąć w jednej chwili. Może wciąż uczę się, jak wygląda bezpieczna relacja i mylę spokój z utratą. Zwłaszcza na odległość - trudno nie mieć wątpliwości, kiedy wybierasz kogoś tak daleko, mając dziewczyny na
+wyciągnięcie ręki (a do tego masz Wenus w Bliźniętach, a Tiktok twierdzi, że to oznacza zdradzanie).
 Ale próbuję. Oduczam się schematów, które już mi nie służą, bo nie chcę, żeby moje lęki były głośniejsze niż moje uczucia. I wiem, jak ciężki może być taki brak zaufania, kiedy jest skierowany w Twoją stronę.
 Jesteś najinteligentniejszą i najzabawniejszą osobą, jaką znam – i mówię to z pełnym przekonaniem. Nigdy nie spotkałam kogoś, z kim mogłabym tak rozmawiać: kogoś, kto intelektualnie mnie stymuluje, uczy mnie nowych rzeczy, a jednocześnie nadąża za moją chaotyczną wyobraźnią i niekończącą się ciekawością. Kogoś, kto chce rozmawiać o sztuce, teatrze i sensie życia bez ironii. Kogoś, kto słucha moich kiepskich wierszy i traktuje je tak, jakby coś znaczyły.
 Otwieranie się po angielsku jest dla mnie trudne. Muszę budować całe światy, żeby wyjaśnić jedną emocję. A jednak z Tobą czuję się bezpieczniej. Dzięki Twojej cierpliwości, empatii, przez to, że naprawdę słuchasz, zamiast tylko czekać na swoją kolej, żeby odpowiedzieć. Tworzysz dla mnie miejsce, nie sprawiając, że czuję się, jakbym zajmowała go za dużo. Dziękuję Ci za to.
@@ -1478,6 +1525,7 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
   </script>
 </body>
 </html>
+
 
 
 
