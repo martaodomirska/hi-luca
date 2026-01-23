@@ -606,6 +606,63 @@
       from{ opacity:1; transform: translate(-50%,-50%) scale(1); }
       to{ opacity:0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0.35); }
     }
+
+    /* ===== countdown widget (new) ===== */
+    #countdownCard{
+      display:none; /* shown when letter opens */
+      width:min(1100px, 94vw);
+      margin: 0 0 26px;
+      padding:18px 18px 16px;
+      border-radius:22px;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border:1px solid var(--border);
+      box-shadow:0 20px 60px var(--shadow);
+      position:relative;
+      z-index:2;
+      text-align:center;
+    }
+
+    #countdownTop{
+      font-weight:900;
+      letter-spacing:.2px;
+      color:var(--dark);
+      font-size:14px;
+      margin-bottom:6px;
+    }
+
+    #countdownDays{
+      font-weight:900;
+      color:var(--pink);
+      font-size:42px;
+      line-height:1.05;
+      margin: 4px 0 4px;
+      text-shadow: 0 14px 34px rgba(255,77,141,0.18);
+    }
+
+    #countdownSub{
+      font-weight:800;
+      color: rgba(178,31,85,0.92);
+      font-size:13px;
+      opacity:0.9;
+      margin-bottom:10px;
+    }
+
+    #countdownBtn{
+      border:none;
+      border-radius:999px;
+      padding:9px 12px;
+      font-size:13px;
+      font-weight:900;
+      cursor:pointer;
+      background: rgba(255,77,141,0.12);
+      border:1px solid rgba(255,77,141,0.28);
+      color:var(--dark);
+      white-space:nowrap;
+      user-select:none;
+    }
+    #countdownBtn:hover{ background: rgba(255,77,141,0.18); }
   </style>
 </head>
 
@@ -712,6 +769,14 @@
         </div>
       </div>
     </div>
+
+    <!-- ===== countdown widget (new) ===== -->
+    <div id="countdownCard" aria-live="polite">
+      <div id="countdownTop">until we meet</div>
+      <div id="countdownDays">—</div>
+      <div id="countdownSub">may 1st, 2026</div>
+      <button id="countdownBtn" type="button">too slow?</button>
+    </div>
   </div>
 
   <script src="chess.min.js"></script>
@@ -803,6 +868,30 @@
 
     const youShadeName = getComputedStyle(document.documentElement).getPropertyValue("--youShadeName").trim().replaceAll('"','');
     const cpuShadeName = getComputedStyle(document.documentElement).getPropertyValue("--cpuShadeName").trim().replaceAll('"','');
+
+    /* ===== countdown widget (new) ===== */
+    const countdownCard = document.getElementById("countdownCard");
+    const countdownDaysEl = document.getElementById("countdownDays");
+    const countdownBtn = document.getElementById("countdownBtn");
+
+    // may 1st, 2026 midnight in chicago (cdt = utc-5) => 05:00 utc
+    const countdownTargetMs = Date.UTC(2026, 4, 1, 5, 0, 0);
+
+    function updateCountdown(){
+      const nowMs = Date.now();
+      const diff = countdownTargetMs - nowMs;
+      const days = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+      countdownDaysEl.textContent = days + " days";
+    }
+
+    if(countdownBtn){
+      countdownBtn.addEventListener("click", () => {
+        countdownBtn.textContent = "sorry. still have to wait.";
+        setTimeout(() => {
+          countdownBtn.textContent = "too slow?";
+        }, 3000);
+      });
+    }
 
     const englishLetter = `It might be cheesy. But as the self-appointed president of the Anti-Nonchalance Club, I’m obligated to do this.
 I don’t think I ever told you about the first time I saw you. And even if I did, you’re going to hear it again. I was walking back to the hostel after some talk show when I noticed you, standing there, talking to another guy. That moment is the reason I went to the welcome party at all. I thought you were cute, but I quietly accepted my fate that this would lead nowhere. Still, somehow, those next two days turned into two of the best days of my life - and I didn’t expect that at all.
@@ -914,11 +1003,28 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
       if(clickTimer) clearTimeout(clickTimer);
       card.style.display = "none";
       letter.style.display = "block";
+
+      // show countdown (new)
+      if(countdownCard){
+        countdownCard.style.display = "block";
+        updateCountdown();
+      }
+
       applyLanguage();
       updateFades();
       initChessOnce();
       setTimeout(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, 50);
+
+      // keep it updated without reload (new)
+      setTimeout(() => updateCountdown(), 50);
     });
+
+    // update countdown every minute (new)
+    setInterval(() => {
+      if(countdownCard && countdownCard.style.display !== "none"){
+        updateCountdown();
+      }
+    }, 60 * 1000);
 
     let last = 0;
     function spawnSparkle(x, y){
@@ -1373,4 +1479,5 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
   </script>
 </body>
 </html>
+
 
