@@ -36,7 +36,6 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ===== HEART LOADER ===== */
     #loader{
       position:fixed;
       inset:0;
@@ -97,11 +96,9 @@
     }
     #loaderFlash.on{ opacity:1; }
 
-    /* content hidden until loader done */
     #app{ opacity:0; transform: translateY(6px); transition: opacity .35s ease, transform .35s ease; }
     #app.ready{ opacity:1; transform: translateY(0); }
 
-    /* ===== FLOATING HEARTS BG ===== */
     .hearts{ position:fixed; inset:0; pointer-events:none; z-index:0; }
     .heart{
       position:absolute; bottom:-40px; font-size:22px; opacity:0.6;
@@ -175,10 +172,9 @@
       border:1px solid rgba(255,77,141,0.35);
     }
 
-    /* ===== PHOTO (CENTERED) ===== */
     #photoWrap{
       position:relative;
-      display:none;            /* hidden until YES */
+      display:none;            
       margin-top:14px;
       width:100%;
       justify-content:center;
@@ -310,6 +306,7 @@
       #letterGrid{ grid-template-columns: 1fr 380px; }
     }
 
+    .leftCol{ display:flex; flex-direction:column; gap:16px; }
     .rightCol{ display:flex; flex-direction:column; gap:14px; }
 
     #paper{
@@ -485,7 +482,6 @@
       box-shadow: 0 8px 18px rgba(255,77,141,0.12);
     }
 
-    /* Wrap board so overlay can sit on top */
     .boardWrap{
       position:relative;
     }
@@ -509,7 +505,6 @@
       z-index:1;
     }
 
-    /* ===== YOU WIN PHOTO OVERLAY ===== */
     #youWinOverlay{
       position:absolute;
       inset:0;
@@ -607,60 +602,59 @@
       to{ opacity:0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0.35); }
     }
 
-    /* ===== countdown widget (new) ===== */
-    #countdownCard{
-      display:none; /* shown when letter opens */
-      width:min(1100px, 94vw);
-      margin: 0 0 26px;
-      padding:18px 18px 16px;
+    #countdownWrap{
+      width:100%;
+      padding:22px 18px;
       border-radius:22px;
       background: rgba(255,255,255,0.72);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border:1px solid var(--border);
-      box-shadow:0 20px 60px var(--shadow);
-      position:relative;
-      z-index:2;
+      border:1px solid rgba(255,77,141,0.25);
+      box-shadow:0 20px 60px rgba(255,77,141,0.22);
       text-align:center;
+      position:relative;
+      overflow:hidden;
     }
+    #countdownWrap::before{
+      content:"";
+      position:absolute;
+      inset:-80px;
+      background: radial-gradient(circle at 30% 20%, rgba(255,77,141,0.12), transparent 55%),
+                  radial-gradient(circle at 70% 80%, rgba(255,143,184,0.12), transparent 55%);
+      pointer-events:none;
+    }
+    #countdownInner{ position:relative; z-index:1; }
 
-    #countdownTop{
+    #countdownTitle{
+      font-size:14px;
       font-weight:900;
       letter-spacing:.2px;
       color:var(--dark);
-      font-size:14px;
       margin-bottom:6px;
     }
-
     #countdownDays{
+      font-size:44px;
       font-weight:900;
       color:var(--pink);
-      font-size:42px;
+      margin:6px 0 2px;
       line-height:1.05;
-      margin: 4px 0 4px;
-      text-shadow: 0 14px 34px rgba(255,77,141,0.18);
     }
-
     #countdownSub{
-      font-weight:800;
-      color: rgba(178,31,85,0.92);
       font-size:13px;
-      opacity:0.9;
-      margin-bottom:10px;
+      color:var(--dark);
+      opacity:.9;
     }
-
     #countdownBtn{
+      margin-top:14px;
       border:none;
       border-radius:999px;
-      padding:9px 12px;
+      padding:9px 14px;
       font-size:13px;
       font-weight:900;
       cursor:pointer;
       background: rgba(255,77,141,0.12);
-      border:1px solid rgba(255,77,141,0.28);
+      border:1px solid rgba(255,77,141,0.35);
       color:var(--dark);
-      white-space:nowrap;
-      user-select:none;
     }
     #countdownBtn:hover{ background: rgba(255,77,141,0.18); }
   </style>
@@ -708,16 +702,28 @@
       </div>
 
       <div id="letterGrid">
-        <div id="paper">
-          <div class="fadeTop" id="fadeTop"></div>
-          <div class="fadeBottom" id="fadeBottom"></div>
+        <div class="leftCol">
+          <div id="paper">
+            <div class="fadeTop" id="fadeTop"></div>
+            <div class="fadeBottom" id="fadeBottom"></div>
 
-          <div id="letterScroll">
-            <div id="letterText"></div>
+            <div id="letterScroll">
+              <div id="letterText"></div>
 
-            <div id="signature">
-              <div class="yours" id="sigYours">yours,</div>
-              <div class="name" id="sigName">marta</div>
+              <div id="signature">
+                <div class="yours" id="sigYours">yours,</div>
+                <div class="name" id="sigName">marta</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- countdown is here (matches the left column width, doesn’t affect chess) -->
+          <div id="countdownWrap" aria-live="polite">
+            <div id="countdownInner">
+              <div id="countdownTitle">until we meet</div>
+              <div id="countdownDays">—</div>
+              <div id="countdownSub">may 1st, 2026</div>
+              <button id="countdownBtn" type="button">too slow?</button>
             </div>
           </div>
         </div>
@@ -756,7 +762,7 @@
             <div class="boardWrap">
               <div class="chessboard" id="board"></div>
 
-              <!-- IMPORTANT: put you-win.jpg next to this HTML file -->
+              <!-- IMPORTANT: put you-win.jpg next to this html file -->
               <div id="youWinOverlay" aria-hidden="true">
                 <img src="you-win.jpg" alt="you win">
               </div>
@@ -768,21 +774,12 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- ===== countdown widget (new) ===== -->
-    <div id="countdownCard" aria-live="polite">
-      <div id="countdownTop">until we meet</div>
-      <div id="countdownDays">—</div>
-      <div id="countdownSub">may 1st, 2026</div>
-      <button id="countdownBtn" type="button">too slow?</button>
-    </div>
-  </div>
+    </div><!-- /#letter -->
+  </div><!-- /#app -->
 
   <script src="chess.min.js"></script>
 
   <script>
-    /* ===== LOADER ===== */
     const loader = document.getElementById("loader");
     const loaderHeart = document.getElementById("loaderHeart");
     const loaderPct = document.getElementById("loaderPct");
@@ -842,7 +839,6 @@
       requestAnimationFrame(tick);
     })();
 
-    /* ===== EXISTING APP ===== */
     const yesBtn = document.getElementById("yesBtn");
     const noBtn  = document.getElementById("noBtn");
     const stage  = document.getElementById("stage");
@@ -869,30 +865,6 @@
     const youShadeName = getComputedStyle(document.documentElement).getPropertyValue("--youShadeName").trim().replaceAll('"','');
     const cpuShadeName = getComputedStyle(document.documentElement).getPropertyValue("--cpuShadeName").trim().replaceAll('"','');
 
-    /* ===== countdown widget (new) ===== */
-    const countdownCard = document.getElementById("countdownCard");
-    const countdownDaysEl = document.getElementById("countdownDays");
-    const countdownBtn = document.getElementById("countdownBtn");
-
-    // may 1st, 2026 midnight in chicago (cdt = utc-5) => 05:00 utc
-    const countdownTargetMs = Date.UTC(2026, 4, 1, 5, 0, 0);
-
-    function updateCountdown(){
-      const nowMs = Date.now();
-      const diff = countdownTargetMs - nowMs;
-      const days = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
-      countdownDaysEl.textContent = days + " days";
-    }
-
-    if(countdownBtn){
-      countdownBtn.addEventListener("click", () => {
-        countdownBtn.textContent = "sorry. still have to wait.";
-        setTimeout(() => {
-          countdownBtn.textContent = "too slow?";
-        }, 3000);
-      });
-    }
-
     const englishLetter = `It might be cheesy. But as the self-appointed president of the Anti-Nonchalance Club, I’m obligated to do this.
 I don’t think I ever told you about the first time I saw you. And even if I did, you’re going to hear it again. I was walking back to the hostel after some talk show when I noticed you, standing there, talking to another guy. That moment is the reason I went to the welcome party at all. I thought you were cute, but I quietly accepted my fate that this would lead nowhere. Still, somehow, those next two days turned into two of the best days of my life - and I didn’t expect that at all.
 At first, you seemed interested. Then distant. You’d reply, but after six hours of leaving me on read. You said you wanted a stable emotional connection, and then you’d grow unreasonably cold. Hot and cold. I won’t pretend that didn’t scare me. It touched something old in me - the part that’s always waiting for things to end suddenly, without warning. Maybe that’s why I sometimes feel like this could disappear in a second. Maybe I’m still learning what secure connection looks like, and I mistake calm for loss. Especially with the distance - it’s hard not to doubt when you choose someone so far away, when there are girls within arm’s reach. (and you have Venus in Gemini, and Tiktok says that means cheating.)
@@ -903,7 +875,7 @@ I love how you care about your friends, how intentionally you show up for them, 
 You make me want to be better - not out of fear of losing you, but out of admiration. You never make me feel small for knowing less, for not being educated in your field, for wanting a life that’s gentler or less complicated. I love how safe I feel with you, even across the distance. How, with you, I finally don’t feel the need to control everything just to feel okay.
 We haven’t known each other for long - but I’m choosing to be curious instead of afraid. I’m excited about getting to know you. About learning how to trust, together, in a way that feels real, intentional, and lasting - no matter the distance, no matter the uncertainty, as long as we keep choosing each other along the way.`;
 
-    const polishLetter = `Pewnie brzmi to trochę banalnie. Ale jako samozwańcza prezeska Klubu Anty-Nonchalancji jestem właściwie zobowiązana, żeby to zrobić.
+    const polishLetter = `Pewnie brzmi to trochę banalnie. Ale jako samozwańcza prezeska Klubu Anty-Nonchalance jestm właściwie zobowiązana, żeby to zrobić.
 Nie wiem, czy kiedykolwiek opowiadałam Ci o pierwszym razie, kiedy Cię zobaczyłam. A nawet jeśli - i tak usłyszysz to jeszcze raz. Wracałam do hostelu po jakimś talk show, kiedy Cię zauważyłam: stałeś tam i rozmawiałeś z innym chłopakiem. To właśnie ten moment sprawił, że w ogóle poszłam na imprezę powitalną. Pomyślałam, że jesteś uroczy, ale po cichu pogodziłam się z tym, że to donikąd nie doprowadzi. A jednak - w jakiś sposób te kolejne dwa dni stały się jednymi z najlepszych dni w moim życiu. I zupełnie się tego nie spodziewałam.
 Na początku wydawałeś się zainteresowany. Potem zdystansowany. Odpisywałeś, ale po sześciu godzinach zostawiania mnie na wyświetlonym. Mówiłeś, że chcesz stabilnej emocjonalnej relacji, a potem stawałeś się oschły. Ciepło - zimno. Nie będę udawać, że mnie to nie przestraszyło. Dotknęło to czegoś we mnie – tej części, która zawsze czeka, aż wszystko nagle się skończy, bez ostrzeżenia. Może dlatego czasem czuję, że to wszystko może zniknąć w jednej chwili. Może wciąż uczę się, jak wygląda bezpieczna relacja i mylę spokój z utratą. Zwłaszcza na odległość - trudno nie mieć wątpliwości, kiedy wybierasz kogoś tak daleko, mając dziewczyny na wyciągnięcie ręki (a do tego masz Wenus w Bliźniętach, a Tiktok twierdzi, że to oznacza zdradzanie).
 Ale próbuję. Oduczam się schematów, które już mi nie służą, bo nie chcę, żeby moje lęki były głośniejsze niż moje uczucia. I wiem, jak ciężki może być taki brak zaufania, kiedy jest skierowany w Twoją stronę.
@@ -1003,28 +975,11 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
       if(clickTimer) clearTimeout(clickTimer);
       card.style.display = "none";
       letter.style.display = "block";
-
-      // show countdown (new)
-      if(countdownCard){
-        countdownCard.style.display = "block";
-        updateCountdown();
-      }
-
       applyLanguage();
       updateFades();
       initChessOnce();
       setTimeout(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, 50);
-
-      // keep it updated without reload (new)
-      setTimeout(() => updateCountdown(), 50);
     });
-
-    // update countdown every minute (new)
-    setInterval(() => {
-      if(countdownCard && countdownCard.style.display !== "none"){
-        updateCountdown();
-      }
-    }, 60 * 1000);
 
     let last = 0;
     function spawnSparkle(x, y){
@@ -1055,7 +1010,29 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
     moveNo();
     applyLanguage();
 
-    /* ===== MINI CHESS ===== */
+    const countdownDaysEl = document.getElementById("countdownDays");
+    const countdownBtn = document.getElementById("countdownBtn");
+
+    const meetTarget = new Date("2026-05-01T00:00:00");
+
+    function updateCountdown(){
+      if(!countdownDaysEl) return;
+      const now = new Date();
+      const diff = meetTarget - now;
+      const days = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+      countdownDaysEl.textContent = days + " days";
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 60 * 1000);
+
+    if(countdownBtn){
+      countdownBtn.addEventListener("click", () => {
+        countdownBtn.textContent = "sorry. still have to wait.";
+        setTimeout(() => { countdownBtn.textContent = "too slow?"; }, 3000);
+      });
+    }
+
     const boardEl = document.getElementById("board");
     const youWinOverlay = document.getElementById("youWinOverlay");
     let youOverlayShownThisGame = false;
@@ -1294,12 +1271,11 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
       if(!chess) return;
 
       if(inCheckmate(chess)){
-        const youLost = (chess.turn() === "w"); // white to move & checkmated => you lost
-        const youWon  = !youLost;              // black to move & checkmated => you won
+        const youLost = (chess.turn() === "w");
+        const youWon  = !youLost;
 
         setStatus(youLost ? "checkmate — you lost 😭" : "checkmate — you won 💗");
 
-        // Show photo only when YOU win AND luca mode is active (aiDepth === 3)
         if(youWon && aiDepth === 3){
           showYouWinOverlay();
         }
@@ -1450,7 +1426,6 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
       renderCaptured();
       renderBoard();
 
-      /* reset overlay state */
       youOverlayShownThisGame = false;
       if(youOverlayTimer) clearTimeout(youOverlayTimer);
       if(youWinOverlay) youWinOverlay.style.display = "none";
@@ -1479,5 +1454,6 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
   </script>
 </body>
 </html>
+
 
 
