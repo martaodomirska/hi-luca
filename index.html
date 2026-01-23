@@ -22,7 +22,7 @@
       --boardLight: rgba(255,255,255,0.78);
       --boardDark: rgba(255,143,184,0.22);
     }
-
+*, *::before, *::after { box-sizing: border-box; }
     body{
       margin:0;
       min-height:100vh;
@@ -1027,7 +1027,7 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
       if(now - last < 28) return;
       last = now;
       spawnSparkle(t.clientX, t.clientY);
-      if(Math.random() < 0.14) spawnSparkle(t.clientX + (Math.random()*14-7), t.clientX + (Math.random()*14-7));
+      if(Math.random() < 0.14) spawnSparkle(t.clientX + (Math.random()*14-7), t.clientY + (Math.random()*14-7));
     }, { passive:true });
 
     moveNo();
@@ -1478,6 +1478,7 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
   </script>
 </body>
 </html>
+
 
 
 
