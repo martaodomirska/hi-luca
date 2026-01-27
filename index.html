@@ -101,7 +101,6 @@
     #app{ opacity:0; transform: translateY(6px); transition: opacity .35s ease, transform .35s ease; }
     #app.ready{ opacity:1; transform: translateY(0); }
 
-    /* ===== floating hearts bg ===== */
     .hearts{ position:fixed; inset:0; pointer-events:none; z-index:0; }
     .heart{
       position:absolute; bottom:-40px; font-size:22px; opacity:0.6;
@@ -305,7 +304,6 @@
       align-items:start;
     }
     @media (min-width: 980px){
-      /* key change: stretch so left side can be the same height as right side */
       #letterGrid{
         grid-template-columns: minmax(0, 1fr) 380px;
         align-items:stretch;
@@ -615,7 +613,6 @@
       to{ opacity:0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0.35); }
     }
 
-    /* ===== countdown card ===== */
     #countdownWrap{
       width:100%;
       padding:22px 18px;
@@ -638,10 +635,8 @@
       pointer-events:none;
     }
 
-    /* keep text above skyline */
     #countdownInner{ position:relative; z-index:2; padding-bottom:74px; }
 
-    /* key change: on desktop, make it stretch to the bottom of the chess card (the black outline area) */
     @media (min-width: 980px){
       #countdownWrap{
         flex:1;
@@ -689,7 +684,6 @@
     }
     #countdownBtn:hover{ background: rgba(255,77,141,0.18); }
 
-    /* ===== chicago skyline silhouette (pink) ===== */
     #chicagoSkyline{
       position:absolute;
       left:0;
@@ -704,6 +698,207 @@
     #chicagoSkyline path{
       fill: rgba(255,77,141,0.22);
     }
+
+    #revealOverlay{
+      position:fixed;
+      inset:0;
+      display:none; /* shown via JS */
+      z-index:99998;
+      place-items:center;
+      background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.88), rgba(255,227,239,0.72));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    #revealOverlay.on{ display:grid; }
+    #revealOverlay .hint{
+      position:absolute;
+      bottom:22px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:12.5px;
+      font-weight:900;
+      color: rgba(178,31,85,0.82);
+      background: rgba(255,255,255,0.72);
+      border:1px solid rgba(255,77,141,0.20);
+      padding:8px 12px;
+      border-radius:999px;
+      box-shadow: 0 18px 42px rgba(255,77,141,0.16);
+      user-select:none;
+    }
+
+    .envelopeStage{
+      width:min(420px, 86vw);
+      aspect-ratio: 4 / 3;
+      position:relative;
+      display:grid;
+      place-items:center;
+      transform: translateY(10px) scale(0.98);
+      opacity:0;
+      animation: ovIn 240ms ease-out forwards;
+    }
+    @keyframes ovIn{
+      to{ opacity:1; transform: translateY(0) scale(1); }
+    }
+
+    .envelope{
+      width:100%;
+      height:100%;
+      position:relative;
+      border-radius:26px;
+      background: rgba(255,255,255,0.55);
+      border:1px solid rgba(255,77,141,0.22);
+      box-shadow: 0 30px 80px rgba(255,77,141,0.22);
+      overflow:hidden;
+    }
+
+    .envelope .pocket{
+      position:absolute;
+      left:50%;
+      bottom:0;
+      width:92%;
+      height:64%;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,143,184,0.16));
+      border:1px solid rgba(255,77,141,0.16);
+      border-bottom-left-radius:22px;
+      border-bottom-right-radius:22px;
+      border-top-left-radius:16px;
+      border-top-right-radius:16px;
+      box-shadow: inset 0 18px 40px rgba(255,77,141,0.08);
+    }
+
+    .envelope .foldL,
+    .envelope .foldR{
+      position:absolute;
+      bottom:0;
+      width:56%;
+      height:54%;
+      background: rgba(255,255,255,0.52);
+      border:1px solid rgba(255,77,141,0.14);
+      filter: drop-shadow(0 10px 22px rgba(255,77,141,0.10));
+    }
+    .envelope .foldL{
+      left:6%;
+      transform: skewX(-18deg);
+      border-bottom-left-radius:22px;
+      border-top-right-radius:18px;
+      opacity:.9;
+    }
+    .envelope .foldR{
+      right:6%;
+      transform: skewX(18deg);
+      border-bottom-right-radius:22px;
+      border-top-left-radius:18px;
+      opacity:.9;
+    }
+
+    .envelope .flap{
+      position:absolute;
+      left:50%;
+      top:9%;
+      width:86%;
+      height:58%;
+      transform: translateX(-50%);
+      transform-origin: 50% 8%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,143,184,0.12));
+      border:1px solid rgba(255,77,141,0.18);
+      border-bottom-left-radius:20px;
+      border-bottom-right-radius:20px;
+      clip-path: polygon(0 0, 100% 0, 50% 78%);
+      z-index:6;
+      animation: flapWait 300ms ease-out both;
+    }
+    @keyframes flapWait{ from{ transform: translateX(-50%) rotateX(0deg);} to{ transform: translateX(-50%) rotateX(0deg);} }
+
+    .envelope .paper{
+      position:absolute;
+      left:50%;
+      bottom:10%;
+      width:80%;
+      height:70%;
+      transform: translateX(-50%) translateY(42%);
+      border-radius:18px;
+      background:
+        repeating-linear-gradient(
+          180deg,
+          rgba(255,255,255,0.96) 0px,
+          rgba(255,255,255,0.96) 24px,
+          rgba(255,77,141,0.06) 25px,
+          rgba(255,77,141,0.06) 26px
+        );
+      border:1px solid rgba(255,77,141,0.16);
+      box-shadow: 0 20px 44px rgba(255,77,141,0.16);
+      z-index:4;
+      overflow:hidden;
+    }
+    .paper .miniText{
+      padding:16px 14px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      color: rgba(59,31,43,0.92);
+      font-size:14px;
+      line-height:1.5;
+      opacity:0.95;
+    }
+    .paper .miniText b{ color: rgba(178,31,85,0.92); }
+
+    .envelope .seal{
+      position:absolute;
+      left:50%;
+      top:46%;
+      width:64px;
+      height:64px;
+      transform: translate(-50%,-50%);
+      border-radius:999px;
+      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.65), rgba(255,77,141,0.95));
+      box-shadow: 0 18px 34px rgba(255,77,141,0.25);
+      border:1px solid rgba(255,255,255,0.32);
+      z-index:7;
+      display:grid;
+      place-items:center;
+      font-size:22px;
+      color:white;
+    }
+
+    #revealOverlay.play .seal{
+      animation: sealPop 420ms cubic-bezier(.2,.9,.2,1) both;
+    }
+    @keyframes sealPop{
+      0%{ transform: translate(-50%,-50%) scale(0.55); opacity:0.0; }
+      60%{ transform: translate(-50%,-50%) scale(1.08); opacity:1; }
+      100%{ transform: translate(-50%,-50%) scale(1); opacity:1; }
+    }
+
+    #revealOverlay.play .flap{
+      animation: flapOpen 620ms cubic-bezier(.2,.9,.2,1) 460ms forwards;
+    }
+    @keyframes flapOpen{
+      from{ transform: translateX(-50%) rotateX(0deg); }
+      to{ transform: translateX(-50%) rotateX(165deg); }
+    }
+
+    #revealOverlay.play .paper{
+      animation: paperUp 820ms cubic-bezier(.2,.9,.2,1) 760ms forwards;
+    }
+    @keyframes paperUp{
+      from{ transform: translateX(-50%) translateY(42%); }
+      to{ transform: translateX(-50%) translateY(-6%); }
+    }
+
+    .ovSpark{
+      position:absolute;
+      width:8px; height:8px;
+      border-radius:999px;
+      background: rgba(255,77,141,0.16);
+      box-shadow: 0 0 12px rgba(255,77,141,0.14), 0 0 26px rgba(255,143,184,0.12);
+      animation: ovFloat 2.8s ease-in-out infinite alternate;
+      pointer-events:none;
+      z-index:1;
+    }
+    @keyframes ovFloat{
+      from{ transform: translate3d(0,0,0); opacity:0.35; }
+      to{ transform: translate3d(0,-18px,0); opacity:0.75; }
+    }
   </style>
 </head>
 
@@ -714,6 +909,31 @@
       <div class="heartShape" id="loaderHeart"></div>
       <div id="loaderPct">0%</div>
     </div>
+  </div>
+
+  <div id="revealOverlay" aria-hidden="true">
+    <div class="ovSpark" style="left:12%; top:20%; animation-delay:-0.4s;"></div>
+    <div class="ovSpark" style="left:86%; top:26%; animation-delay:-1.2s;"></div>
+    <div class="ovSpark" style="left:18%; top:76%; animation-delay:-0.9s;"></div>
+    <div class="ovSpark" style="left:82%; top:72%; animation-delay:-1.7s;"></div>
+
+    <div class="envelopeStage">
+      <div class="envelope" role="img" aria-label="an envelope opening">
+        <div class="paper">
+          <div class="miniText">
+            <b>for luca</b><br>
+            i wrote you something.<br>
+            (tap to open)
+          </div>
+        </div>
+        <div class="pocket"></div>
+        <div class="foldL"></div>
+        <div class="foldR"></div>
+        <div class="flap"></div>
+        <div class="seal">💗</div>
+      </div>
+    </div>
+    <div class="hint">tap to skip</div>
   </div>
 
   <div id="app">
@@ -772,7 +992,6 @@
               <button id="countdownBtn" type="button">too slow?</button>
             </div>
 
-            <!-- chicago skyline silhouette -->
             <svg id="chicagoSkyline" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
               <path d="
                 M0,200
@@ -832,7 +1051,6 @@
             <div class="boardWrap">
               <div class="chessboard" id="board"></div>
 
-              <!-- IMPORTANT: put you-win.jpg next to this html file -->
               <div id="youWinOverlay" aria-hidden="true">
                 <img src="you-win.jpg" alt="you win">
               </div>
@@ -932,6 +1150,8 @@
     const fadeTop = document.getElementById("fadeTop");
     const fadeBottom = document.getElementById("fadeBottom");
 
+    const revealOverlay = document.getElementById("revealOverlay");
+
     const youShadeName = getComputedStyle(document.documentElement).getPropertyValue("--youShadeName").trim().replaceAll('"','');
     const cpuShadeName = getComputedStyle(document.documentElement).getPropertyValue("--cpuShadeName").trim().replaceAll('"','');
 
@@ -947,8 +1167,7 @@ We haven’t known each other for long - but I’m choosing to be curious instea
 
     const polishLetter = `Pewnie brzmi to trochę banalnie. Ale jako samozwańcza prezeska Klubu Anty-Nonszalancji jestem właściwie zobowiązana, żeby to zrobić.
 Nie wiem, czy kiedykolwiek opowiadałam Ci o pierwszym razie, kiedy Cię zobaczyłam. A nawet jeśli - i tak usłyszysz to jeszcze raz. Wracałam do hostelu po jakimś talk show, kiedy Cię zauważyłam: stałeś tam i rozmawiałeś z innym chłopakiem. To właśnie ten moment sprawił, że w ogóle poszłam na imprezę powitalną. Pomyślałam, że jesteś uroczy, ale po cichu pogodziłam się z tym, że to donikąd nie doprowadzi. A jednak - w jakiś sposób te kolejne dwa dni stały się jednymi z najlepszych dni w moim życiu. I zupełnie się tego nie spodziewałam.
-Na początku wydawałeś się zainteresowany. Potem zdystansowany. Odpisywałeś, ale po sześciu godzinach zostawiania mnie na wyświetlonym. Mówiłeś, że chcesz stabilnej emocjonalnej relacji, a potem stawałeś się oschły. Ciepło - zimno. Nie będę udawać, że mnie to nie przestraszyło. Dotknęło to czegoś we mnie – tej części, która zawsze czeka, aż wszystko nagle się skończy, bez ostrzeżenia. Może dlatego czasem czuję, że to wszystko może zniknąć w jednej chwili. Może wciąż uczę się, jak wygląda bezpieczna relacja i mylę spokój z utratą. Zwłaszcza na odległość - trudno nie mieć wątpliwości, kiedy wybierasz kogoś tak daleko, mając dziewczyny na
-wyciągnięcie ręki (a do tego masz Wenus w Bliźniętach, a Tiktok twierdzi, że to oznacza zdradzanie).
+Na początku wydawałeś się zainteresowany. Potem zdystansowany. Odpisywałeś, ale po sześciu godzinach zostawiania mnie na wyświetlonym. Mówiłeś, że chcesz stabilnej emocjonalnej relacji, a potem stawałeś się oschły. Ciepło - zimno. Nie będę udawać, że mnie to nie przestraszyło. Dotknęło to czegoś we mnie – tej części, która zawsze czeka, aż wszystko nagle się skończy, bez ostrzeżenia. Może dlatego czasem czuję, że to wszystko może zniknąć w jednej chwili. Może wciąż uczę się, jak wygląda bezpieczna relacja i mylę spokój z utratą. Zwłaszcza na odległość - trudno nie mieć wątpliwości, kiedy wybierasz kogoś tak daleko, mając dziewczyny na wyciągnięcie ręki (a do tego masz Wenus w Bliźniętach, a Tiktok twierdzi, że to oznacza zdradzanie).
 Ale próbuję. Oduczam się schematów, które już mi nie służą, bo nie chcę, żeby moje lęki były głośniejsze niż moje uczucia. I wiem, jak ciężki może być taki brak zaufania, kiedy jest skierowany w Twoją stronę.
 Jesteś najinteligentniejszą i najzabawniejszą osobą, jaką znam – i mówię to z pełnym przekonaniem. Nigdy nie spotkałam kogoś, z kim mogłabym tak rozmawiać: kogoś, kto intelektualnie mnie stymuluje, uczy mnie nowych rzeczy, a jednocześnie nadąża za moją chaotyczną wyobraźnią i niekończącą się ciekawością. Kogoś, kto chce rozmawiać o sztuce, teatrze i sensie życia bez ironii. Kogoś, kto słucha moich kiepskich wierszy i traktuje je tak, jakby coś znaczyły.
 Otwieranie się po angielsku jest dla mnie trudne. Muszę budować całe światy, żeby wyjaśnić jedną emocję. A jednak z Tobą czuję się bezpieczniej. Dzięki Twojej cierpliwości, empatii, przez to, że naprawdę słuchasz, zamiast tylko czekać na swoją kolej, żeby odpowiedzieć. Tworzysz dla mnie miejsce, nie sprawiając, że czuję się, jakbym zajmowała go za dużo. Dziękuję Ci za to.
@@ -1041,15 +1260,67 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
       applyLanguage();
     });
 
-    yesPic.addEventListener("click", () => {
+    let revealLock = false;
+    let revealSkip = null;
+
+    function showRevealOverlay(){
+      return new Promise((resolve) => {
+        if(revealLock) return resolve();
+        revealLock = true;
+
+        // reduced motion: skip animation
+        if(prefersReduced){
+          revealLock = false;
+          return resolve();
+        }
+
+        revealOverlay.classList.add("on");
+        revealOverlay.setAttribute("aria-hidden", "false");
+
+        requestAnimationFrame(() => {
+          revealOverlay.classList.add("play");
+        });
+
+        const totalMs = 1700; // matches delays in CSS (seal -> flap -> paper)
+        let done = false;
+
+        function finish(){
+          if(done) return;
+          done = true;
+
+          revealOverlay.classList.remove("play");
+          revealOverlay.classList.remove("on");
+          revealOverlay.setAttribute("aria-hidden", "true");
+
+          if(revealSkip){
+            revealOverlay.removeEventListener("click", revealSkip);
+            revealSkip = null;
+          }
+          revealLock = false;
+          resolve();
+        }
+
+        revealSkip = () => finish();
+        revealOverlay.addEventListener("click", revealSkip, { once:true });
+
+        setTimeout(finish, totalMs);
+      });
+    }
+
+    async function openLetterFlow(){
       if(clickTimer) clearTimeout(clickTimer);
+
+      await showRevealOverlay();
+
       card.style.display = "none";
       letter.style.display = "block";
       applyLanguage();
       updateFades();
       initChessOnce();
       setTimeout(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, 50);
-    });
+    }
+
+    yesPic.addEventListener("click", openLetterFlow);
 
     let last = 0;
     function spawnSparkle(x, y){
@@ -1185,12 +1456,6 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
     }
 
     function squareColor(file, rank){ return ((file + rank) % 2 === 0) ? "light" : "darkSq"; }
-
-    function clearSelectionUI(){
-      selected = null;
-      legalTargets.clear();
-      [...boardEl.querySelectorAll(".sq")].forEach(s => s.classList.remove("sel","hl"));
-    }
 
     function setStatus(text){ statusEl.textContent = text; }
 
@@ -1525,12 +1790,3 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
