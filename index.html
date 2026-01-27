@@ -101,7 +101,6 @@
     #app{ opacity:0; transform: translateY(6px); transition: opacity .35s ease, transform .35s ease; }
     #app.ready{ opacity:1; transform: translateY(0); }
 
-    /* ===== floating hearts bg ===== */
     .hearts{ position:fixed; inset:0; pointer-events:none; z-index:0; }
     .heart{
       position:absolute; bottom:-40px; font-size:22px; opacity:0.6;
@@ -614,7 +613,6 @@
       to{ opacity:0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0.35); }
     }
 
-    /* ===== countdown card ===== */
     #countdownWrap{
       width:100%;
       padding:22px 18px;
@@ -686,7 +684,6 @@
     }
     #countdownBtn:hover{ background: rgba(255,77,141,0.18); }
 
-    /* ===== chicago skyline silhouette (pink) ===== */
     #chicagoSkyline{
       position:absolute;
       left:0;
@@ -702,10 +699,7 @@
       fill: rgba(255,77,141,0.22);
     }
 
-    /* =========================================================
-       CHANGE #10 (refined): Wax seal holds longer + paper unfolds
-       - no "tap to open" text (it opens itself)
-       ========================================================= */
+
     #revealOverlay{
       position:fixed;
       inset:0;
@@ -759,7 +753,6 @@
       overflow:hidden;
     }
 
-    /* pocket */
     .envelope .pocket{
       position:absolute;
       left:50%;
@@ -777,7 +770,6 @@
       z-index:2;
     }
 
-    /* folds */
     .envelope .foldL,
     .envelope .foldR{
       position:absolute;
@@ -804,7 +796,6 @@
       opacity:.9;
     }
 
-    /* flap with shadow that appears as it opens */
     .envelope .flap{
       position:absolute;
       left:50%;
@@ -831,7 +822,6 @@
       pointer-events:none;
     }
 
-    /* letter paper with a folded top edge */
     .envelope .paper{
       position:absolute;
       left:50%;
@@ -854,7 +844,6 @@
       overflow:hidden;
     }
 
-    /* folded top (paper curl) */
     .paper .foldTop{
       position:absolute;
       left:0; right:0;
@@ -887,7 +876,6 @@
     }
     .paper .miniText b{ color: rgba(178,31,85,0.92); }
 
-    /* wax seal (more waxy: irregular edge + shine) */
     .envelope .seal{
       position:absolute;
       left:50%;
@@ -911,7 +899,6 @@
       filter: saturate(1.06);
     }
 
-    /* irregular wax edge */
     .envelope .seal::before{
       content:"";
       position:absolute;
@@ -946,11 +933,17 @@
       );
       z-index:-1;
     }
+#revealOverlay.play .seal{
+    animation:
+    sealPop 520ms cubic-bezier(.2,.9,.2,1) both,
+    sealSettle 1200ms ease-in-out 700ms both;
+}
 
-    /* seal "stamp" moment + HOLD (longer) */
-    #revealOverlay.play .seal{
-      animation: sealStampHold 1550ms cubic-bezier(.2,.9,.2,1) both;
-    }
+@keyframes sealSettle{
+  0%{ filter: drop-shadow(0 18px 34px rgba(255,77,141,0.25)); }
+  50%{ transform: translate(-50%,-50%) scale(1.02); }
+  100%{ transform: translate(-50%,-50%) scale(1); }
+}
     @keyframes sealStampHold{
       0%{ transform: translate(-50%,-50%) scale(0.55); opacity:0; }
       22%{ transform: translate(-50%,-50%) scale(1.12); opacity:1; }
@@ -959,9 +952,8 @@
       100%{ transform: translate(-50%,-50%) scale(0.88); opacity:0; } /* fade before opening */
     }
 
-    /* flap opens AFTER the hold */
     #revealOverlay.play .flap{
-      animation: flapOpen 760ms cubic-bezier(.2,.9,.2,1) 1200ms forwards;
+      animation: flapOpen 900ms cubic-bezier(.2,.9,.2,1) 1900ms forwards;
     }
     @keyframes flapOpen{
       from{ transform: translateX(-50%) rotateX(0deg); }
@@ -969,9 +961,8 @@
     }
     #revealOverlay.play .flap::after{ opacity:1; }
 
-    /* paper slides up, then "unfolds" top edge */
     #revealOverlay.play .paper{
-      animation: paperUp 900ms cubic-bezier(.2,.9,.2,1) 1520ms forwards;
+      animation: paperUp 1200ms cubic-bezier(.2,.9,.2,1) 3000ms forwards;
     }
     @keyframes paperUp{
       from{ transform: translateX(-50%) translateY(46%); }
@@ -986,7 +977,6 @@
       to{ transform: rotateX(0deg); opacity:0.98; }
     }
 
-    /* sparkle drift behind */
     .ovSpark{
       position:absolute;
       width:8px; height:8px;
@@ -1013,7 +1003,6 @@
     </div>
   </div>
 
-  <!-- Wax seal reveal overlay -->
   <div id="revealOverlay" aria-hidden="true">
     <div class="ovSpark" style="left:12%; top:20%; animation-delay:-0.4s;"></div>
     <div class="ovSpark" style="left:86%; top:26%; animation-delay:-1.2s;"></div>
@@ -1385,7 +1374,7 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
           revealOverlay.classList.add("play");
         });
 
-        const totalMs = 1700; // matches delays in CSS (seal -> flap -> paper)
+        const totalMs = 5000;
         let done = false;
 
         function finish(){
@@ -1894,4 +1883,5 @@ Nie znamy się długo, ale wybieram ciekawość zamiast strachu. Nie mogę się 
   </script>
 </body>
 </html>
+
 
